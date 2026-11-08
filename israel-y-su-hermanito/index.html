@@ -67,7 +67,7 @@ main{flex:1;display:flex;align-items:center;justify-content:center;padding:.5rem
 .libro{
   position:relative;width:min(1100px,100%);
   aspect-ratio:16/10;max-height:calc(100dvh - 150px);
-  perspective:2200px;
+  perspective:4200px;
 }
 .hoja{
   position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr;
@@ -87,18 +87,36 @@ main{flex:1;display:flex;align-items:center;justify-content:center;padding:.5rem
 .lado.lamina img{width:100%;height:100%;object-fit:contain;display:block}
 
 .portada .lamina img{object-fit:cover}
-.titulo-portada{position:absolute;left:0;right:0;top:0;padding:1.6rem 1rem 3rem;text-align:center;
-  background:linear-gradient(rgba(255,250,240,.95),rgba(255,250,240,.8) 60%,rgba(255,250,240,0));pointer-events:none}
-.titulo-portada h2{font-family:"Fredoka",sans-serif;color:var(--titulo);font-size:clamp(2.2rem,5vw,3.6rem);margin:0;line-height:1.1}
-.titulo-portada p{margin:.3rem 0 0;font-size:1.25rem;color:var(--acento);font-weight:700}
+.titulo-portada{position:absolute;left:1.2rem;top:1.2rem;max-width:calc(100% - 2.4rem);
+  padding:.6rem 1.6rem .7rem;text-align:center;border-radius:18px;
+  background:rgba(255,250,240,.9);box-shadow:0 6px 18px rgba(0,0,0,.25);pointer-events:none}
+.titulo-portada h2{text-align:left;font-family:"Fredoka",sans-serif;color:var(--titulo);font-size:clamp(1.7rem,4vw,2.8rem);margin:0;line-height:1.1;white-space:nowrap}
+.titulo-portada p{margin:.2rem 0 0;text-align:left;font-size:1.1rem;color:var(--acento);font-weight:700}
 .abrir{position:absolute;bottom:1.4rem;left:50%;transform:translateX(-50%);font:inherit;font-weight:700;font-size:1.2rem;
   color:#fff;background:var(--acento);border:none;border-radius:999px;padding:.7rem 1.6rem;cursor:pointer;box-shadow:0 6px 16px rgba(0,0,0,.3)}
-/* animación de pasar la hoja */
-.hoja.entra-sig{transform-origin:left center;animation:pasarSig .55s ease-out}
-.hoja.entra-ant{transform-origin:right center;animation:pasarAnt .55s ease-out}
-@keyframes pasarSig{from{transform:rotateY(-35deg);opacity:.2}to{transform:none;opacity:1}}
-@keyframes pasarAnt{from{transform:rotateY(35deg);opacity:.2}to{transform:none;opacity:1}}
-@media (prefers-reduced-motion:reduce){.hoja.entra-sig,.hoja.entra-ant{animation:none}}
+/* paso suave para páginas de ancho completo */
+.hoja.suave{animation:suave .4s ease-out}
+@keyframes suave{from{opacity:.25}to{opacity:1}}
+
+/* hoja que gira sobre el lomo (solo en páginas dobles) */
+.voltea{position:absolute;top:0;bottom:0;width:50%;z-index:6;transform-style:preserve-3d;pointer-events:none}
+.voltea.der{left:50%;transform-origin:left center;animation:giraSig .75s ease-in-out forwards}
+.voltea.izq{left:0;transform-origin:right center;animation:giraAnt .75s ease-in-out forwards}
+@keyframes giraSig{from{transform:rotateY(0)}to{transform:rotateY(-180deg)}}
+@keyframes giraAnt{from{transform:rotateY(0)}to{transform:rotateY(180deg)}}
+.cara{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  background:var(--papel);overflow:hidden;display:flex}
+.cara > .lado{flex:1;min-width:0}
+.cara.atras{transform:rotateY(180deg)}
+.voltea.der .cara.frente,.voltea.izq .cara.atras{border-radius:0 10px 10px 0}
+.voltea.der .cara.atras,.voltea.izq .cara.frente{border-radius:10px 0 0 10px}
+/* sombra que recorre la hoja mientras gira */
+.cara::after{content:"";position:absolute;inset:0;pointer-events:none;animation:sombraHoja .75s ease-in-out forwards}
+@keyframes sombraHoja{0%{background:rgba(0,0,0,0)}50%{background:rgba(0,0,0,.18)}100%{background:rgba(0,0,0,0)}}
+.queda{position:absolute;top:0;bottom:0;width:50%;z-index:5;display:flex;background:var(--papel);overflow:hidden}
+.queda > .lado{flex:1;min-width:0}
+.queda.izq{left:0;border-radius:10px 0 0 10px}
+.queda.der{left:50%;border-radius:0 10px 10px 0}
 
 /* ---------- textos ---------- */
 .cuento p{font-size:var(--letra);line-height:1.7;margin:0 0 1rem}
@@ -166,6 +184,9 @@ main{flex:1;display:flex;align-items:center;justify-content:center;padding:.5rem
   .hoja::after{display:none}
   .lado{padding:1.3rem 1.2rem;justify-content:flex-start}
   .lado.lamina{aspect-ratio:4/3}
+  .titulo-portada{left:50%;transform:translateX(-50%);width:max-content;max-width:calc(100% - 2rem)}
+  .titulo-portada h2{white-space:normal}
+  .titulo-portada p{text-align:center}
   .hoja.sola{grid-template-rows:1fr}
   .hoja.sola .lado{justify-content:center}
   .hoja.sola .lado.lamina{aspect-ratio:auto;height:100%}
@@ -417,10 +438,17 @@ const LIBRO = {
     n = Math.max(0, Math.min(hojas.length-1, n));
     pararVoz();
     document.querySelectorAll("video").forEach(v=>v.pause());
+    const vieja = libro.querySelector(".hoja");
+    const ladosViejos = vieja && !vieja.classList.contains("sola") ? [...vieja.children].filter(c=>c.classList.contains("lado")) : [];
     actual = n;
     libro.innerHTML = pintar(hojas[n], n);
     const hoja = libro.firstElementChild;
-    if(sentido) hoja.classList.add(sentido>0 ? "entra-sig" : "entra-ant");
+    const ladosNuevos = hoja.classList.contains("sola") ? [] : [...hoja.children].filter(c=>c.classList.contains("lado"));
+    if(sentido){
+      if(ladosViejos.length===2 && ladosNuevos.length===2 && dosPaginas.matches && !sinMovimiento.matches)
+        voltearHoja(sentido, ladosViejos, ladosNuevos);
+      else if(!sinMovimiento.matches) hoja.classList.add("suave");
+    }
     $("#ant").disabled = $("#ant2").disabled = n===0;
     $("#sig").disabled = $("#sig2").disabled = n===hojas.length-1;
     $("#avance").max = hojas.length-1; $("#avance").value = n;
@@ -431,6 +459,32 @@ const LIBRO = {
     const ancla = h.id || (h.tipo==="indice" ? "indice" : h.tipo==="carta" ? "carta" : "pagina-"+(n+1));
     if(location.hash !== "#"+ancla) history.replaceState(null, "", "#"+ancla);
     if(leerSolo && h.audio) tocar(hoja.querySelector(".escuchar"));
+  }
+
+  const dosPaginas = matchMedia("(min-width:821px) and (orientation:landscape)");
+  const sinMovimiento = matchMedia("(prefers-reduced-motion: reduce)");
+  // La hoja derecha (o izquierda, al regresar) gira sobre el lomo
+  function voltearHoja(sentido, viejos, nuevos){
+    const copia = el => { const c = el.cloneNode(true); c.removeAttribute("tabindex"); return c; };
+    const queda = document.createElement("div");
+    const hojaQueGira = document.createElement("div");
+    const frente = document.createElement("div"), atras = document.createElement("div");
+    frente.className = "cara frente"; atras.className = "cara atras";
+    if(sentido>0){
+      queda.className = "queda izq";  queda.appendChild(copia(viejos[0]));   // lo que se ve a la izquierda mientras gira
+      hojaQueGira.className = "voltea der";
+      frente.appendChild(copia(viejos[1])); atras.appendChild(copia(nuevos[0]));
+    }else{
+      queda.className = "queda der";  queda.appendChild(copia(viejos[1]));
+      hojaQueGira.className = "voltea izq";
+      frente.appendChild(copia(viejos[0])); atras.appendChild(copia(nuevos[1]));
+    }
+    hojaQueGira.append(frente, atras);
+    queda.setAttribute("aria-hidden","true"); hojaQueGira.setAttribute("aria-hidden","true");
+    libro.append(queda, hojaQueGira);
+    const limpiar = ()=>{ queda.remove(); hojaQueGira.remove(); };
+    hojaQueGira.addEventListener("animationend", e=>{ if(e.target===hojaQueGira) limpiar(); });
+    setTimeout(limpiar, 1200);
   }
 
   function tocar(btn){
