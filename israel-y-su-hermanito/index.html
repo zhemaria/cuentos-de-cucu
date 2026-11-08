@@ -86,14 +86,14 @@ main{flex:1;display:flex;align-items:center;justify-content:center;padding:.5rem
 .lado.lamina{padding:0;background:#f3ead8;cursor:zoom-in}
 .lado.lamina img{width:100%;height:100%;object-fit:contain;display:block}
 
-.portada .lamina img{object-fit:cover}
-.titulo-portada{position:absolute;left:1.2rem;top:1.2rem;max-width:calc(100% - 2.4rem);
-  padding:.6rem 1.6rem .7rem;text-align:center;border-radius:18px;
-  background:rgba(255,250,240,.9);box-shadow:0 6px 18px rgba(0,0,0,.25);pointer-events:none}
-.titulo-portada h2{text-align:left;font-family:"Fredoka",sans-serif;color:var(--titulo);font-size:clamp(1.7rem,4vw,2.8rem);margin:0;line-height:1.1;white-space:nowrap}
-.titulo-portada p{margin:.2rem 0 0;text-align:left;font-size:1.1rem;color:var(--acento);font-weight:700}
-.abrir{position:absolute;bottom:1.4rem;left:50%;transform:translateX(-50%);font:inherit;font-weight:700;font-size:1.2rem;
-  color:#fff;background:var(--acento);border:none;border-radius:999px;padding:.7rem 1.6rem;cursor:pointer;box-shadow:0 6px 16px rgba(0,0,0,.3)}
+/* portada a doble página: título a la izquierda, lámina completa a la derecha */
+.lado.portada-izq{align-items:center;text-align:center;gap:1.1rem;
+  background:radial-gradient(ellipse at center,#fffdf7 0%,var(--papel) 60%,#f6ead2 100%)}
+.portada-izq .gran{font-family:"Fredoka",sans-serif;color:var(--titulo);font-size:clamp(2.2rem,4.2vw,3.6rem);line-height:1.08;margin:0}
+.portada-izq .sub{margin:0;font-size:1.3rem;color:var(--acento);font-weight:700}
+.portada-izq .cucu{width:96px;height:96px;border-radius:50%;object-fit:cover;box-shadow:0 4px 14px rgba(0,0,0,.2)}
+.abrir{font:inherit;font-weight:700;font-size:1.2rem;color:#fff;background:var(--acento);border:none;
+  border-radius:999px;padding:.7rem 1.6rem;cursor:pointer;box-shadow:0 6px 16px rgba(0,0,0,.25)}
 /* paso suave para páginas de ancho completo */
 .hoja.suave{animation:suave .4s ease-out}
 @keyframes suave{from{opacity:.25}to{opacity:1}}
@@ -188,9 +188,11 @@ main{flex:1;display:flex;align-items:center;justify-content:center;padding:.5rem
   .hoja::after{display:none}
   .lado{padding:1.3rem 1.2rem;justify-content:flex-start}
   .lado.lamina{aspect-ratio:4/3}
-  .titulo-portada{left:50%;transform:translateX(-50%);width:max-content;max-width:calc(100% - 2rem)}
-  .titulo-portada h2{white-space:normal}
-  .titulo-portada p{text-align:center}
+  .hoja.portada{grid-template-rows:auto minmax(0,1fr);overflow:hidden}
+  .portada-izq{padding:1rem 1rem .8rem;gap:.5rem}
+  .portada-izq .cucu{display:none}
+  .portada-izq .gran{font-size:2rem}
+  .hoja.portada .lado.lamina{aspect-ratio:auto;height:100%}
   .indice + .lamina{display:none}
   .hoja.sola{grid-template-rows:1fr}
   .hoja.sola .lado{justify-content:center}
@@ -386,9 +388,13 @@ const LIBRO = {
   function pintar(h, i){
     switch(h.tipo){
       case "portada":
-        return `<div class="hoja sola portada">${lamina(h.img, h.alt)}
-          <div class="titulo-portada"><h2>${esc(LIBRO.titulo)}</h2><p>Un cuento de Cucu</p></div>
-          <button class="abrir" type="button" data-ir="1">Abrir el libro ›</button></div>`;
+        return `<div class="hoja portada">
+          <div class="lado portada-izq">
+            <img class="cucu" src="${esc(LIBRO.avatar)}" alt="">
+            <h2 class="gran">${esc(LIBRO.titulo)}</h2>
+            <p class="sub">Un cuento de Cucu</p>
+            <button class="abrir" type="button" data-ir="1">Abrir el libro ›</button>
+          </div>${lamina(h.img, h.alt)}</div>`;
       case "portadilla":
         return `<div class="hoja">
           <div class="lado portadilla">
