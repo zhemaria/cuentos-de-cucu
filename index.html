@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Los cuentos de Cucu</title>
+<meta name="description" content="Cuentos ilustrados y narrados por Cucu para sus biznietos.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Fredoka:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{--mesa:#2f4f6f;--mesa-2:#24405c;--madera:#a8723f;--madera-2:#7d5229;--titulo:#0b6fa4;--acento:#e8792b}
+*{box-sizing:border-box}
+body{margin:0;min-height:100dvh;font-family:"Andika",system-ui,sans-serif;color:#fff;
+  background:radial-gradient(ellipse at top,var(--mesa) 0%,var(--mesa-2) 100%)}
+header{text-align:center;padding:2.5rem 1rem 1rem}
+h1{font-family:"Fredoka",sans-serif;font-size:clamp(2.2rem,6vw,3.6rem);margin:0}
+header p{font-size:1.15rem;opacity:.9;margin:.5rem 0 0}
+main{max-width:1100px;margin:0 auto;padding:1.5rem 16px 3rem}
+.estante{
+  list-style:none;margin:0;padding:1.5rem 1.5rem 0;
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,210px));justify-content:center;gap:2rem 1.5rem;
+  background:linear-gradient(transparent calc(100% - 22px),var(--madera) calc(100% - 22px),var(--madera-2) 100%);
+  border-radius:6px;
+}
+.estante li{padding-bottom:22px}
+.cuento{display:block;color:inherit;text-decoration:none;text-align:center}
+.cuento img{
+  width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:4px 10px 10px 4px;background:#fffaf0;
+  box-shadow:-6px 0 0 rgba(0,0,0,.18) inset,0 10px 22px rgba(0,0,0,.4);
+  transition:transform .2s ease;
+}
+.cuento:hover img,.cuento:focus-visible img{transform:translateY(-8px) rotate(-1.5deg)}
+.cuento strong{display:block;font-family:"Fredoka",sans-serif;font-weight:600;font-size:1.15rem;margin-top:.7rem}
+.cuento span{font-size:.95rem;opacity:.85}
+:focus-visible{outline:3px solid #ffd54a;outline-offset:4px;border-radius:8px}
+footer{text-align:center;font-size:.85rem;opacity:.75;padding:0 1rem 2rem}
+@media (prefers-reduced-motion:reduce){.cuento img{transition:none}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Los cuentos de Cucu</h1>
+  <p>Historias ilustradas y narradas para mis biznietos</p>
+</header>
+<main>
+  <h2 style="position:absolute;left:-999px">Cuentos</h2>
+  <!-- Para añadir un cuento: copiar un <li> y cambiar carpeta, portada, título y dedicatoria -->
+  <ul class="estante">
+    <li>
+      <a class="cuento" href="israel-y-su-hermanito/">
+        <img src="israel-y-su-hermanito/images/portada.png" alt="">
+        <strong>Israel y su hermanito</strong>
+        <span>Para Israel, al terminar el Kindergarten</span>
+      </a>
+    </li>
+  </ul>
+</main>
+<footer>Con todo el amor de Cucu · Licencia Creative Commons BY-NC-SA 4.0</footer>
+</body>
+</html>

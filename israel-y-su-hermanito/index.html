@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Israel y su hermanito</title>
+<meta name="description" content="Un cuento ilustrado y narrado por Cucu para Israel.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Fredoka:wght@500;600&display=swap" rel="stylesheet">
+<style>
+/* =========================================================
+   LIBRO DE CUENTOS — plantilla reutilizable
+   El contenido del cuento está en el objeto LIBRO (más abajo).
+   ========================================================= */
+:root{
+  --papel:#fffaf0;
+  --papel-borde:#ead9b9;
+  --mesa:#2f4f6f;
+  --mesa-2:#24405c;
+  --tinta:#2b2b2b;
+  --titulo:#0b6fa4;
+  --acento:#e8792b;
+  --boton:#ffffff;
+  --sombra:0 18px 40px rgba(0,0,0,.35);
+  --letra:1.25rem;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{
+  font-family:"Andika",system-ui,sans-serif;
+  color:var(--tinta);
+  background:radial-gradient(ellipse at top,var(--mesa) 0%,var(--mesa-2) 100%);
+  min-height:100dvh;
+  display:flex;flex-direction:column;
+}
+.salto{position:absolute;left:-999px;top:0;background:#fff;padding:.5rem 1rem;z-index:50}
+.salto:focus{left:1rem}
+
+/* ---------- barra superior ---------- */
+.barra{
+  display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;
+  padding:.6rem 1rem;color:#fff;
+}
+.barra h1{
+  font-family:"Fredoka",sans-serif;font-weight:600;font-size:1.15rem;
+  margin:0 auto 0 0;letter-spacing:.3px;
+}
+.barra a,.barra button{
+  font:inherit;font-size:.95rem;color:#fff;background:rgba(255,255,255,.14);
+  border:1px solid rgba(255,255,255,.3);border-radius:999px;
+  padding:.35rem .85rem;cursor:pointer;text-decoration:none;
+  min-height:40px;display:inline-flex;align-items:center;gap:.35rem;
+}
+.barra a:hover,.barra button:hover{background:rgba(255,255,255,.26)}
+.barra button[aria-pressed="true"]{background:var(--acento);border-color:var(--acento)}
+:focus-visible{outline:3px solid #ffd54a;outline-offset:3px}
+
+/* ---------- escenario del libro ---------- */
+main{flex:1;display:flex;align-items:center;justify-content:center;padding:.5rem 1rem 1rem;gap:.75rem}
+.flecha{
+  flex:none;width:56px;height:56px;border-radius:50%;border:none;cursor:pointer;
+  background:var(--boton);color:var(--titulo);font-size:1.8rem;line-height:1;
+  box-shadow:0 4px 12px rgba(0,0,0,.3);
+}
+.flecha:disabled{opacity:.3;cursor:default}
+.libro{
+  position:relative;width:min(1100px,100%);
+  aspect-ratio:16/10;max-height:calc(100dvh - 150px);
+  perspective:2200px;
+}
+.hoja{
+  position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr;
+  background:var(--papel);border-radius:10px;box-shadow:var(--sombra);
+  overflow:hidden;
+}
+/* lomo del libro */
+.hoja::after{
+  content:"";position:absolute;top:0;bottom:0;left:50%;width:46px;transform:translateX(-50%);
+  background:linear-gradient(90deg,rgba(0,0,0,0) 0%,rgba(0,0,0,.13) 45%,rgba(0,0,0,.2) 50%,rgba(0,0,0,.13) 55%,rgba(0,0,0,0) 100%);
+  pointer-events:none;
+}
+.hoja.sola{grid-template-columns:1fr}
+.hoja.sola::after{display:none}
+.lado{position:relative;overflow:auto;padding:2.2rem 2.4rem;display:flex;flex-direction:column;justify-content:center}
+.lado.lamina{padding:0;background:#f3ead8;cursor:zoom-in}
+.lado.lamina img{width:100%;height:100%;object-fit:contain;display:block}
+
+/* animación de pasar la hoja */
+.hoja.entra-sig{transform-origin:left center;animation:pasarSig .55s ease-out}
+.hoja.entra-ant{transform-origin:right center;animation:pasarAnt .55s ease-out}
+@keyframes pasarSig{from{transform:rotateY(-35deg);opacity:.2}to{transform:none;opacity:1}}
+@keyframes pasarAnt{from{transform:rotateY(35deg);opacity:.2}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){.hoja.entra-sig,.hoja.entra-ant{animation:none}}
+
+/* ---------- textos ---------- */
+.cuento p{font-size:var(--letra);line-height:1.7;margin:0 0 1rem}
+.titulo-cap{
+  font-family:"Fredoka",sans-serif;color:var(--titulo);text-align:center;
+  font-size:clamp(1.8rem,3.4vw,2.8rem);line-height:1.2;margin:0 0 1rem;
+}
+.num-cap{display:block;text-align:center;color:var(--acento);font-family:"Fredoka",sans-serif;
+  font-size:1.05rem;letter-spacing:2px;text-transform:uppercase;margin-bottom:.4rem}
+.portadilla{text-align:center}
+.portadilla .gran{font-family:"Fredoka",sans-serif;color:var(--titulo);font-size:clamp(2rem,4vw,3.2rem);margin:.2rem 0 1rem}
+.portadilla .autor{font-size:1.3rem}
+.licencia{font-size:.8rem;color:#6b6b6b;margin-top:2rem}
+.indice h2{font-family:"Fredoka",sans-serif;color:var(--titulo);font-size:1.9rem;text-align:center;margin:0 0 1rem}
+.indice ol{list-style:none;margin:0;padding:0;counter-reset:cap}
+.indice li{margin:.35rem 0}
+.indice li:not(.ex){counter-increment:cap}
+.indice a{
+  display:flex;gap:.7rem;align-items:center;padding:.55rem .8rem;border-radius:10px;
+  color:var(--tinta);text-decoration:none;font-size:1.12rem;background:#fff;border:1px solid var(--papel-borde);
+}
+.indice a:hover{background:#fff2df}
+.indice a::before{
+  content:counter(cap);flex:none;width:2rem;height:2rem;border-radius:50%;
+  display:grid;place-items:center;background:var(--titulo);color:#fff;font-weight:700;
+}
+.indice a.extra::before{content:"♥";background:var(--acento)}
+.carta h2{font-family:"Fredoka",sans-serif;color:var(--titulo);margin:0 0 .8rem;font-size:1.7rem}
+.carta p{font-size:1.08rem;line-height:1.65;margin:0 0 .75rem}
+.firma{font-family:"Fredoka",sans-serif;color:var(--titulo);font-size:1.35rem;text-align:right}
+.fin{font-family:"Fredoka",sans-serif;color:var(--titulo);font-size:clamp(4rem,10vw,7rem);text-align:center;margin:0}
+.video-hoja{background:#111;display:flex;align-items:center;justify-content:center}
+.video-hoja video{width:100%;height:100%;object-fit:contain;background:#000}
+
+/* botón de narración */
+.escuchar{
+  align-self:center;margin-top:.6rem;display:inline-flex;align-items:center;gap:.6rem;
+  font:inherit;font-size:1.05rem;font-weight:700;color:var(--titulo);
+  background:#fff;border:2px solid var(--titulo);border-radius:999px;padding:.3rem 1.1rem .3rem .3rem;cursor:pointer;
+}
+.escuchar img{width:52px;height:52px;border-radius:50%;object-fit:cover;background:#e8f3fa}
+.escuchar[aria-pressed="true"]{background:var(--titulo);color:#fff}
+.escuchar:hover{box-shadow:0 0 0 4px rgba(11,111,164,.18)}
+
+/* pie */
+.pie{display:flex;align-items:center;justify-content:center;gap:1rem;color:#fff;padding:0 1rem .9rem;font-size:.95rem}
+.pie #contador{white-space:nowrap}
+.pie progress{width:min(320px,50vw);height:10px;accent-color:var(--acento)}
+
+/* visor de lámina grande */
+.visor{position:fixed;inset:0;background:rgba(0,0,0,.88);display:none;align-items:center;justify-content:center;z-index:40;cursor:zoom-out}
+.visor.abierto{display:flex}
+.visor img{max-width:96vw;max-height:94dvh;border-radius:8px}
+.visor button{position:absolute;top:1rem;right:1rem;width:48px;height:48px;border-radius:50%;border:none;font-size:1.6rem;cursor:pointer}
+
+.pie .tocar{display:none;gap:.5rem}
+/* ---------- celular y tableta vertical: una página a la vez ---------- */
+@media (max-width:820px), (orientation:portrait){
+  main{padding:.25rem .5rem .5rem;gap:0}
+  .flecha{display:none}
+  .libro{aspect-ratio:auto;height:calc(100dvh - 140px);max-height:none}
+  .hoja{grid-template-columns:1fr;grid-template-rows:auto 1fr;overflow:auto}
+  .hoja::after{display:none}
+  .lado{padding:1.3rem 1.2rem;justify-content:flex-start}
+  .lado.lamina{aspect-ratio:4/3}
+  .hoja.sola .lado{justify-content:center}
+  .barra{padding:.5rem .75rem;flex-wrap:nowrap;gap:.35rem}
+  .barra h1{font-size:1rem;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .barra a,.barra button{padding:.3rem .6rem;flex:none}
+  .barra .txt{display:none}
+  .libro{height:calc(100dvh - 125px)}
+  .pie .tocar{display:inline-flex}
+}
+.pie .tocar button{width:48px;height:48px;border-radius:50%;border:none;background:#fff;color:var(--titulo);font-size:1.5rem;cursor:pointer}
+.pie .tocar button:disabled{opacity:.3}
+
+body.letra-grande{--letra:1.5rem}
+</style>
+</head>
+<body>
+<a class="salto" href="#libro">Ir al libro</a>
+
+<header class="barra">
+  <h1 id="nombre-libro">Israel y su hermanito</h1>
+  <a href="../" aria-label="Volver a la biblioteca de cuentos">📚 <span class="txt">Biblioteca</span></a>
+  <a href="#indice" aria-label="Ir al índice">☰ <span class="txt">Índice</span></a>
+  <button id="btn-auto" type="button" aria-pressed="false" title="Al pasar la página, Cucu la lee en voz alta" aria-label="Léemelo: Cucu lee cada página al pasarla">🔊 <span class="txt">Léemelo</span></button>
+  <button id="btn-letra" type="button" aria-pressed="false" title="Cambiar el tamaño de la letra" aria-label="Letra más grande">A+ <span class="txt">Letra</span></button>
+</header>
+
+<main>
+  <button class="flecha" id="ant" type="button" aria-label="Página anterior">‹</button>
+  <div class="libro" id="libro" aria-live="polite"></div>
+  <button class="flecha" id="sig" type="button" aria-label="Página siguiente">›</button>
+</main>
+
+<div class="pie">
+  <span class="tocar"><button id="ant2" type="button" aria-label="Página anterior">‹</button></span>
+  <progress id="avance" max="1" value="0" aria-label="Avance en el libro"></progress>
+  <span id="contador">1 / 1</span>
+  <span class="tocar"><button id="sig2" type="button" aria-label="Página siguiente">›</button></span>
+</div>
+
+<div class="visor" id="visor" role="dialog" aria-modal="true" aria-label="Lámina en grande">
+  <img id="visor-img" alt="">
+  <button type="button" id="visor-cerrar" aria-label="Cerrar la lámina">✕</button>
+</div>
+
+<audio id="voz" preload="none"></audio>
+
+<script>
+/* =========================================================
+   CONTENIDO DEL CUENTO
+   Cada hoja tiene un "tipo":
+     portada · portadilla · indice · carta · video · capitulo · pagina · fin
+   Para un cuento nuevo basta con copiar esta carpeta y cambiar LIBRO.
+   ========================================================= */
+const LIBRO = {
+  titulo: "Israel y su hermanito",
+  autor: "José M. Fernández (Cucu)",
+  avatar: "images/avatar.png",
+  hojas: [
+    { tipo:"portada", img:"images/portada.png", alt:"Portada del libro Israel y su hermanito" },
+
+    { tipo:"portadilla" },
+
+    { tipo:"carta", img:"images/000.png", titulo:"Mi pequeño Israel", parrafos:[
+      "Este libro lo he creado especialmente para ti, celebrando tu graduación de Kindergarten. He intentado capturar los momentos más especiales que has vivido desde que supiste que tendrías un hermanito hasta este gran día en que te has convertido en un «niño grande» graduado.",
+      "¿Recuerdas cuando te contaron que Adrián vendría a tu vida? ¿Tus preguntas y curiosidad? Ahora eres el mejor hermano mayor que Adrián podría desear. Me llena de orgullo ver cómo le enseñas palabras nuevas, cómo compartes tus juguetes y cómo le muestras el mundo con tus ojos llenos de maravilla.",
+      "Israel, quiero que sepas que la vida es como un gran libro de aventuras, y tú apenas estás comenzando a escribir el tuyo. El primer grado te espera con nuevos amigos, nuevos conocimientos y muchas más aventuras. Lleva contigo la misma curiosidad, generosidad y valentía que has mostrado hasta ahora.",
+      "Algún día, cuando seas mayor, espero que al hojear estas páginas recuerdes no solo las historias que cuentan, sino también cuánto te he querido y cómo he disfrutado viendo crecer a mi maravilloso biznieto.",
+      "Con todo mi amor,"
+    ], firma:"Tu bisabuelo Zhema" },
+
+    { tipo:"indice" },
+
+    { tipo:"video", src:"video/cuento_Israel2.mp4", poster:"video/poster/001.png", etiqueta:"Video de presentación del cuento" },
+
+    /* ---------- Capítulo 1 ---------- */
+    { tipo:"capitulo", id:"cap-1", titulo:"Israel tiene un hermanito", audio:"audio/pag06.mp3", img:"images/1.png" },
+    { tipo:"pagina", audio:"audio/pag08.mp3", img:"images/2.png", texto:
+      "Había una vez un niño llamado Israel, que tenía tres años y un cabello negro como la noche. Él vivía con su mamá y su papá en una casa llena de risas y juguetes. Un día, su mamá le dijo que estaba esperando un hermanito. Israel no sabía qué significaba eso, así que miró a su mamá con curiosidad y un poco de preocupación." },
+    { tipo:"pagina", audio:"audio/pag10.mp3", img:"images/3.png", texto:
+      "—¿Qué es un hermanito? —preguntó Israel, frunciendo el ceño. Su mamá se agachó junto a él y respondió: —Un hermanito es como un nuevo mejor amigo que vivirá con nosotros. Podrá jugar contigo y compartir tus juguetes. Israel se imaginó tener a alguien con quien jugar y sintió una pequeña chispa de emoción, aunque también un poco de miedo porque no sabía cómo sería." },
+    { tipo:"pagina", audio:"audio/pag12.mp3", img:"images/4.png", texto:
+      "Esa noche, mientras cenaban, su papá le dijo: —Tu hermanito necesitará mucho cuidado, igual que cuando eras un bebé. Israel pensó en cómo sus papás siempre cuidaban de él, y se dio cuenta de que eso no cambiaría; simplemente habría un segundo niño al que también atender. —¿Me dejarán jugar a la pelota con él? —preguntó Israel, y sus padres rieron, prometiéndole que un día sí." },
+    { tipo:"pagina", audio:"audio/pag14.mp3", img:"images/4b.png", texto:
+      "Pasaron las semanas y, aunque Israel a veces se sentía un poco celoso, su mamá siempre le hablaba de lo genial que sería tener un hermano pequeño. —Juntos podrán hacer mil aventuras —le decía. Y aunque no lo podía ver aún, Israel empezó a imaginar todas las cosas divertidas que haría con su hermanito, desde construir castillos de almohadas hasta jugar al escondite." },
+    { tipo:"pagina", audio:"audio/pag18.mp3", img:"images/6.png", texto:
+      "Finalmente, llegó el gran día. Israel conoció a su hermano, que era un pequeño bebé con unas manitas regordetas. Se sintió feliz y lleno de amor por aquel pequeño ser. —¡Hola, hermanito! —le dijo Israel con una gran sonrisa. De repente, entendió que tener un hermano era como tener un nuevo compañero de aventuras. Y, desde ese momento, su corazón se llenó de alegría al pensar en todas las travesuras que harían juntos." },
+
+    /* ---------- Capítulo 2 ---------- */
+    { tipo:"capitulo", id:"cap-2", titulo:"Israel y su nuevo hermanito", audio:"audio/pag20.mp3", img:"images/7.png" },
+    { tipo:"pagina", audio:"audio/pag22.mp3", img:"images/8.png", texto:
+      "Israel se sintió muy feliz con su nuevo hermanito llamado Adrián. ¡Era tan pequeñito! Pero Israel empezó a notar que sus papás pasaban mucho tiempo con Adrián, llevándolo en brazos, jugando con él y dándole muchos abrazos. Israel no entendía por qué todos se fijaban tanto en su nuevo hermanito y empezó a sentir un poco de celos." },
+    { tipo:"pagina", audio:"audio/pag24.mp3", img:"images/9.png", texto:
+      "Un día, mientras su mamá estaba cargando a Adrián, Israel se acercó y, haciendo pucheros, le dijo: —¡Yo también quiero que me carguen! Su mamá le sonrió y le explicó: —Adrián es muy chiquitito, necesita más ayuda. ¡Pero tú eres un niño grande y fuerte! A Israel le gustó lo que escuchó, pero aún no podía evitar pensar que era menos especial que su hermanito." },
+    { tipo:"pagina", audio:"audio/pag26.mp3", img:"images/10.png", texto:
+      "Sus papás vieron que Israel estaba un poco triste y decidieron hablar con él. Su papá se agachó a su altura y le dijo: —Israel, tú sigues siendo nuestro niño especial. A veces, los bebés necesitan un poco más de atención. Pero siempre habrá un lugar grande y cálido para ti en nuestros brazos. Israel empezó a sentir que no tenía que preocuparse: sus papás lo querían tanto como a Adrián." },
+    { tipo:"pagina", audio:"audio/pag28.mp3", img:"images/11.png", texto:
+      "Días después, Israel tuvo una idea brillante. Fue corriendo a buscar su peluche favorito y se lo dio a Adrián. —Este es mi amigo, puedes jugar con él, ¡pero a mí también me necesitas! —dijo con una sonrisa. Sus papás aplaudieron y le dijeron que era muy generoso. Desde entonces, Israel comenzó a jugar con Adrián y se dio cuenta de que ser hermano mayor era una aventura muy divertida." },
+    { tipo:"pagina", audio:"audio/pag30.mp3", img:"images/12.png", texto:
+      "Con el tiempo, Israel aprendió que tener un hermanito no significaba tener menos amor, sino que el amor se multiplicaba. Ahora, siempre que sus papás cargaban a Adrián, Israel se unía a ellos con gusto, porque sabía que ellos también estaban allí para él. Y así, con risas y juegos, Israel y Adrián se convirtieron en los mejores amigos, mostrando al mundo que el amor de una familia nunca se divide: ¡se multiplica!" },
+
+    /* ---------- Capítulo 3 ---------- */
+    { tipo:"capitulo", id:"cap-3", titulo:"Las aventuras de Israel y Adrián", audio:"audio/pag32.mp3", img:"images/13.png" },
+    { tipo:"pagina", audio:"audio/pag34.mp3", img:"images/14.png", texto:
+      "En un soleado día de primavera, Israel decidió que era el momento perfecto para jugar con su hermanito Adrián. Con un año de edad, Adrián ya era un niño fuerte y curioso. Sus ojos brillaban de emoción cada vez que veía a su hermano mayor acercarse. Israel sonrió y pensó en las muchas aventuras que podrían tener juntos, así que se sentó en el suave césped del jardín y lo llamó: —¡Adrián, ven aquí! ¡Vamos a jugar!" },
+    { tipo:"pagina", audio:"audio/pag36.mp3", img:"images/15.png", texto:
+      "Israel comenzó a enseñarle palabras divertidas. —Di «pelota» —le dijo mientras sostenía una colorida pelota que rebotaba con un sonido mágico. Adrián miró la pelota con atención y, con un poco de esfuerzo, dijo: —Pe-po-ta. Ambos se rieron a carcajadas, y esto hizo que sus papás se acercaran a ver qué sucedía. Les encantaba ver cómo sus dos pequeños se divertían juntos." },
+    { tipo:"pagina", audio:"audio/pag38.mp3", img:"images/16.png", texto:
+      "Más tarde, Israel quiso enseñarle a Adrián cómo jugar con los bloques de construcción. Le mostró cómo apilar los bloques uno sobre otro. —Así, mira, hermano —dijo mientras hacía una torre alta. Adrián aplaudió emocionado y, aunque a veces los bloques se caían, él no se desanimaba. Israel lo animó: —¡Buen intento, Adrián! Pronto lo harás muy bien." },
+    { tipo:"pagina", audio:"audio/pag40.mp3", img:"images/17.png", texto:
+      "Al atardecer, sus papás se unieron a ellos e hicieron una casa de campaña como los tipis de los indios sioux. —¡Es nuestra casa de aventuras! —exclamó Israel. Adrián sonrió, sintiéndose parte de algo grandioso. Los tres se acomodaron dentro de la casa de campaña. Papá y mamá comenzaron a contar historias de piratas y tesoros escondidos." },
+    { tipo:"pagina", audio:"audio/pag42.mp3", img:"images/18.png", texto:
+      "Cuando el sol comenzó a ocultarse, Israel y Adrián estaban muy cansados, pero felices. Habían aprendido y jugado juntos todo el día. Sus papás abrazaron a los dos, sintiendo ese amor tan especial entre hermanos. Israel miró a Adrián y le susurró: —Nunca olvides que siempre seré tu compañero de aventuras. Adrián aplaudió y, aunque no lo dijera, en su corazón sabía que eso era cierto. ¡Y así concluyó su divertido día lleno de risas y aprendizaje!" },
+
+    /* ---------- Capítulo 4 ---------- */
+    { tipo:"capitulo", id:"cap-4", titulo:"La primera aventura escolar de Israel", audio:"audio/pag44.mp3", img:"images/19.png" },
+    { tipo:"pagina", audio:"audio/pag46.mp3", img:"images/20.png", texto:
+      "Hoy era un día muy especial para Israel, porque ¡iba a su primer día de escuela! Con una mochila nueva y muchas ganas, se despidió de su mamá y se unió a otros niños que también iban al Kindergarten. Todo era emocionante y nuevo. Al entrar al aula, vio una gran pizarra llena de colores y figuras. La maestra, una amable señora con ojos brillantes, les dio la bienvenida y les dijo que en ese lugar aprenderían muchas cosas divertidas." },
+    { tipo:"pagina", audio:"audio/pag48.mp3", img:"images/21.png", texto:
+      "Durante la mañana, Israel y sus amigos aprendieron los colores. Aprendieron que el mar es azul, el sol es amarillo y las fresas son rojas. Cada niño tuvo que decir su color favorito. Israel sonrió al decir que su color preferido era el azul, como el del cielo. Después de pintar con muchos colores, la maestra les presentó las formas: círculos, cuadrados y triángulos. ¡Qué divertido era aprender jugando!" },
+    { tipo:"pagina", audio:"audio/pag50.mp3", img:"images/22.png", texto:
+      "Más tarde, llegó la hora de los números. Israel contaba con sus deditos y se emocionaba al llegar al diez. La maestra les enseñó a sumar con juguetes, y eso les hizo reír mucho. Al finalizar la clase, todos aprendieron a escribir las letras del abecedario. Israel se sentía cada vez más feliz, sintiendo que cada cosa que aprendía era una nueva aventura." },
+    { tipo:"pagina", audio:"audio/pag52.mp3", img:"images/23.png", texto:
+      "Cuando llegó a casa, Israel no podía esperar para compartir lo que había aprendido. —¡Adrián, ven rápido! —gritó a su hermanito. Juntos se sentaron en la alfombra, e Israel comenzó a enseñarle los colores. —Mira, esta manzana es roja y esta naranja es amarilla. Adrián sonreía. Israel continuaba: —Ese dado que tienes en la mano es azul." },
+    { tipo:"pagina", audio:"audio/pag54.mp3", img:"images/24.png", texto:
+      "Cuando anocheció, Israel y Adrián se fueron a la cama. Como Adrián aún era muy pequeñito, Israel se acostó a su lado para que no tuviera miedo, mientras Adrián abrazaba el osito de peluche que le regaló Israel cuando era pequeñito." },
+
+    /* ---------- Capítulo 5 ---------- */
+    { tipo:"capitulo", id:"cap-5", titulo:"La aventura de Israel y Génesis", audio:"audio/pag56.mp3", img:"images/25.png" },
+    { tipo:"pagina", audio:"audio/pag58.mp3", img:"images/26.png", texto:
+      "Israel estaba muy emocionado porque su prima Génesis venía de México. Era la primera vez que la iba a conocer. Desde que su mamá le contó que iba a visitarles, no podía dejar de pensar en lo divertido que sería jugar juntos. Israel sabía que Génesis era de la misma edad que su hermanito Adrián, y eso lo llenaba de alegría. ¡Tres niños juntos siempre es mejor que uno!" },
+    { tipo:"pagina", audio:"audio/pag60.mp3", img:"images/27.png", texto:
+      "Cuando Génesis llegó, llevaba una sonrisa tan grande que iluminó toda la casa. Israel la miró y pensó que era igualita a la foto que había visto antes. Tenía el cabello rizado y unos ojos brillantes que reflejaban la aventura. —¡Hola, prima! —le dijo Israel, corriendo hacia ella. Génesis le respondió con un abrazo cálido y, en ese momento, Israel supo que se harían grandes amigos." },
+    { tipo:"pagina", audio:"audio/pag62.mp3", img:"images/28.png", texto:
+      "A la mañana siguiente, que era sábado, los tres niños salieron con sus mamás a visitar el Navy Pier de Chicago. Allí disfrutaron corriendo entre los chorros de agua que salían del piso, montaron en la rueda y también en un gran tobogán y una cama elástica. Mientras corrían y reían, Génesis les mostró a Israel y a Adrián un juego que había traído de México: «La carrera de sacos». Aunque al principio se caían y reían, pronto se convirtieron en unos expertos en saltar." },
+    { tipo:"pagina", audio:"audio/pag64.mp3", img:"images/29.png", texto:
+      "A medida que pasaba el día, empezaron a hablar sobre México y sus pueblos mágicos. Génesis les contó sobre las piñatas y la deliciosa comida que había en su país. Israel y Adrián estaban tan asombrados que no dejaban de hacer preguntas, sobre todo cuando Génesis les contó sobre los alebrijes, que son como los ángeles guardianes, pero mexicanos. Cada historia hacía que el corazón de Israel y Adrián se llenara de ganas de conocer México." },
+    { tipo:"pagina", audio:"audio/pag66.mp3", img:"images/30.png", texto:
+      "Al caer la tarde, Israel, Génesis y Adrián se sentaron en la hierba, cansados pero felices. Miraban hacia el cielo, que se llenaba de estrellas. Israel se dio cuenta de que sentía un cariño muy especial por su prima. —Espero que podamos jugar juntos muchas veces más —dijo. Génesis sonrió y le respondió: —¡Así será! ¡Esto es solo el comienzo de nuestras aventuras! Y así, los tres amigos soñaron con la próxima gran fiesta que tendrían cuando los tres estuvieran en México." },
+
+    /* ---------- Capítulo 6 ---------- */
+    { tipo:"capitulo", id:"cap-6", titulo:"La gran graduación de Israel", audio:"audio/pag68.mp3", img:"images/31.png" },
+    { tipo:"pagina", audio:"audio/pag70.mp3", img:"images/32.png", texto:
+      "Israel estaba a punto de graduarse del jardín de infantes. Era un niño muy estudioso e inteligente. Cada día, Israel se esforzaba por aprender cosas nuevas y disfrutar de sus juegos con sus amigos. Sus maestras, Miss Quintero y Miss Hernández, lo querían mucho porque siempre hacía preguntas interesantes y ayudaba a sus compañeros cuando tenían dudas." },
+    { tipo:"pagina", audio:"audio/pag72.mp3", img:"images/33.png", texto:
+      "El día de la graduación, la escuela se llenó de risas y colores. Todos los niños estaban vestidos con trajes bonitos y sus mejores sonrisas. En el teatro de la escuela, las familias esperaban emocionadas. Por fin, comenzaron la ceremonia y los padres aplaudían con orgullo. Israel estaba un poco nervioso, pero Miss Quintero le dio una sonrisa que lo tranquilizó." },
+    { tipo:"pagina", audio:"audio/pag74.mp3", img:"images/34.png", texto:
+      "Entre los asistentes estaban su hermanito Adrián, que lo miraba con admiración, su papá José Armando y su mamá Rosalía; todos sonreían con felicidad. También estaban su abuelo Armando y su bisabuelo Zhema, quienes siempre le contaban historias de cuando ellos eran pequeños. Todos esperaban con ansias el momento de ver a Israel recibir su diploma." },
+    { tipo:"pagina", audio:"audio/pag76.mp3", img:"images/35.png", texto:
+      "Cuando llegó su turno, Israel subió al escenario con paso firme. Miss Quintero y Miss Hernández le entregaron su diploma con una gran sonrisa. Israel se sintió muy feliz y dio una pequeña vuelta para mostrar su felicidad. Todos en la sala aplaudieron y vitorearon su nombre. ¡Era un momento especial que nunca olvidaría!" },
+    { tipo:"pagina", audio:"audio/pag78.mp3", img:"images/36.png", texto:
+      "Después de la ceremonia, todos lo abrazaron con alegría. La familia organizó una fiesta con globos y pastel de colores. Israel se sintió rodeado de amor y apoyo. ¡Era un día muy feliz para él! Y mientras disfrutaba de la fiesta, supo que siempre seguiría aprendiendo y creciendo, porque la aventura apenas comenzaba." },
+
+    { tipo:"video", id:"final", src:"video/Israel_End.mp4", poster:"video/poster/998B.png", etiqueta:"Video final del cuento" },
+    { tipo:"video", src:"video/final.mp4", poster:"video/poster/998A.png", etiqueta:"Despedida" },
+    { tipo:"fin" }
+  ]
+};
+
+/* =========================================================
+   MOTOR DEL LIBRO (no hace falta tocarlo)
+   ========================================================= */
+(function(){
+  const $ = s => document.querySelector(s);
+  const libro = $("#libro"), voz = $("#voz");
+  const hojas = LIBRO.hojas;
+  let actual = 0;
+  let leerSolo = false;
+
+  // Preferencias del lector (si el navegador no las guarda, no pasa nada)
+  try{
+    leerSolo = localStorage.getItem("cucu-leer") === "1";
+    if(localStorage.getItem("cucu-letra") === "1") document.body.classList.add("letra-grande");
+  }catch(e){}
+  $("#btn-auto").setAttribute("aria-pressed", leerSolo);
+  $("#btn-letra").setAttribute("aria-pressed", document.body.classList.contains("letra-grande"));
+
+  const capitulos = hojas.map((h,i)=>({h,i})).filter(o=>o.h.tipo==="capitulo");
+  const esc = t => String(t).replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+  function botonEscuchar(audio){
+    if(!audio) return "";
+    return `<button class="escuchar" type="button" data-audio="${esc(audio)}" aria-pressed="false">
+      <img src="${esc(LIBRO.avatar)}" alt=""> <span>Escuchar a Cucu</span></button>`;
+  }
+  function lamina(img, alt, contener){
+    return `<div class="lado lamina${contener?" contener":""}" data-grande="${esc(img)}" role="button" tabindex="0" aria-label="Ver la lámina en grande">
+      <img src="${esc(img)}" alt="${esc(alt||"Ilustración del cuento")}"></div>`;
+  }
+
+  function pintar(h, i){
+    switch(h.tipo){
+      case "portada":
+        return `<div class="hoja sola">${lamina(h.img, h.alt, true)}</div>`;
+      case "portadilla":
+        return `<div class="hoja">
+          <div class="lado portadilla">
+            <p class="gran">${esc(LIBRO.titulo)}</p>
+            <p class="autor">Escrito con cariño por<br><strong>${esc(LIBRO.autor)}</strong></p>
+          </div>
+          <div class="lado portadilla">
+            <p>Toca <strong>Escuchar a Cucu</strong> en cada página para oír el cuento.</p>
+            <p>Pasa las páginas con las flechas, con el teclado o deslizando el dedo.</p>
+            <p class="licencia">Esta obra está bajo una licencia Creative Commons 4.0 Internacional: Reconocimiento – No Comercial – Compartir Igual.</p>
+          </div></div>`;
+      case "indice": {
+        const items = capitulos.map((c,n)=>`<li><a href="#${c.h.id}">${esc(c.h.titulo)}</a></li>`).join("");
+        const fin = hojas.findIndex(x=>x.id==="final");
+        return `<div class="hoja sola"><nav class="lado indice" id="indice-nav" aria-label="Índice">
+          <h2>Viajando por el libro</h2>
+          <ol><li class="ex"><a class="extra" href="#carta">Mi pequeño Israel</a></li>${items}
+          ${fin>=0?`<li class="ex"><a class="extra" href="#final">El final con video</a></li>`:""}</ol></nav></div>`;
+      }
+      case "carta":
+        return `<div class="hoja">
+          ${lamina(h.img, "Cucu, el bisabuelo de Israel", true)}
+          <div class="lado carta"><h2>${esc(h.titulo)}</h2>
+          ${h.parrafos.map(p=>`<p>${esc(p)}</p>`).join("")}
+          <p class="firma">${esc(h.firma)}</p></div></div>`;
+      case "video":
+        return `<div class="hoja sola"><div class="lado video-hoja">
+          <video controls preload="none" playsinline poster="${esc(h.poster)}" aria-label="${esc(h.etiqueta)}">
+            <source src="${esc(h.src)}" type="video/mp4">Tu navegador no puede mostrar este video.</video></div></div>`;
+      case "capitulo": {
+        const n = capitulos.findIndex(c=>c.i===i)+1;
+        return `<div class="hoja">${lamina(h.img, "Ilustración del capítulo " + n)}
+          <div class="lado cuento"><span class="num-cap">Capítulo ${n}</span>
+          <h2 class="titulo-cap">${esc(h.titulo)}</h2>${botonEscuchar(h.audio)}</div></div>`;
+      }
+      case "pagina":
+        return `<div class="hoja">${lamina(h.img)}
+          <div class="lado cuento"><p>${esc(h.texto)}</p>${botonEscuchar(h.audio)}</div></div>`;
+      case "fin":
+        return `<div class="hoja sola"><div class="lado" style="text-align:center">
+          <p class="fin">Fin</p>
+          <p><a href="#indice">Volver al índice</a> · <a href="../">Ver otros cuentos de Cucu</a></p></div></div>`;
+    }
+    return "";
+  }
+
+  function pararVoz(){
+    voz.pause();
+    document.querySelectorAll(".escuchar").forEach(b=>{b.setAttribute("aria-pressed","false");b.querySelector("span").textContent="Escuchar a Cucu";});
+  }
+
+  function ir(n, sentido){
+    n = Math.max(0, Math.min(hojas.length-1, n));
+    pararVoz();
+    document.querySelectorAll("video").forEach(v=>v.pause());
+    actual = n;
+    libro.innerHTML = pintar(hojas[n], n);
+    const hoja = libro.firstElementChild;
+    if(sentido) hoja.classList.add(sentido>0 ? "entra-sig" : "entra-ant");
+    $("#ant").disabled = $("#ant2").disabled = n===0;
+    $("#sig").disabled = $("#sig2").disabled = n===hojas.length-1;
+    $("#avance").max = hojas.length-1; $("#avance").value = n;
+    $("#contador").textContent = `${n+1} / ${hojas.length}`;
+    // precargar las láminas vecinas
+    [n+1,n-1].forEach(k=>{ if(hojas[k] && hojas[k].img){ const im=new Image(); im.src=hojas[k].img; }});
+    const h = hojas[n];
+    const ancla = h.id || (h.tipo==="indice" ? "indice" : h.tipo==="carta" ? "carta" : "pagina-"+(n+1));
+    if(location.hash !== "#"+ancla) history.replaceState(null, "", "#"+ancla);
+    if(leerSolo && h.audio) tocar(hoja.querySelector(".escuchar"));
+  }
+
+  function tocar(btn){
+    if(!btn) return;
+    const src = btn.dataset.audio;
+    if(btn.getAttribute("aria-pressed")==="true"){ pararVoz(); return; }
+    pararVoz();
+    voz.src = src;
+    voz.play().then(()=>{
+      btn.setAttribute("aria-pressed","true");
+      btn.querySelector("span").textContent = "Pausar";
+    }).catch(()=>{});
+  }
+  voz.addEventListener("ended", pararVoz);
+
+  function desdeAncla(){
+    const a = decodeURIComponent(location.hash.slice(1));
+    if(!a) return 0;
+    if(a==="indice") return hojas.findIndex(h=>h.tipo==="indice");
+    if(a==="carta") return hojas.findIndex(h=>h.tipo==="carta");
+    const porId = hojas.findIndex(h=>h.id===a);
+    if(porId>=0) return porId;
+    const m = a.match(/^pagina-(\d+)$/);
+    return m ? (+m[1]-1) : 0;
+  }
+
+  // Eventos
+  $("#ant").onclick = $("#ant2").onclick = ()=>ir(actual-1,-1);
+  $("#sig").onclick = $("#sig2").onclick = ()=>ir(actual+1, 1);
+  window.addEventListener("hashchange", ()=>{ const n=desdeAncla(); if(n!==actual) ir(n, n>actual?1:-1); });
+
+  libro.addEventListener("click", e=>{
+    const b = e.target.closest(".escuchar"); if(b){ tocar(b); return; }
+    const l = e.target.closest("[data-grande]"); if(l) abrirVisor(l.dataset.grande, l.querySelector("img").alt);
+  });
+  libro.addEventListener("keydown", e=>{
+    const l = e.target.closest("[data-grande]");
+    if(l && (e.key==="Enter"||e.key===" ")){ e.preventDefault(); abrirVisor(l.dataset.grande, l.querySelector("img").alt); }
+  });
+
+  document.addEventListener("keydown", e=>{
+    if($("#visor").classList.contains("abierto")){ if(e.key==="Escape") cerrarVisor(); return; }
+    if(e.target.closest("video")) return;
+    if(e.key==="ArrowRight"||e.key==="PageDown") ir(actual+1,1);
+    if(e.key==="ArrowLeft"||e.key==="PageUp") ir(actual-1,-1);
+    if(e.key==="Home") ir(0,-1);
+    if(e.key==="End") ir(hojas.length-1,1);
+  });
+
+  // deslizar el dedo
+  let x0=null, y0=null;
+  libro.addEventListener("touchstart", e=>{ x0=e.touches[0].clientX; y0=e.touches[0].clientY; }, {passive:true});
+  libro.addEventListener("touchend", e=>{
+    if(x0===null) return;
+    const dx=e.changedTouches[0].clientX-x0, dy=e.changedTouches[0].clientY-y0;
+    if(Math.abs(dx)>60 && Math.abs(dx)>Math.abs(dy)*1.5) ir(actual+(dx<0?1:-1), dx<0?1:-1);
+    x0=null;
+  });
+
+  $("#btn-auto").onclick = function(){
+    leerSolo = !leerSolo; this.setAttribute("aria-pressed", leerSolo);
+    try{ localStorage.setItem("cucu-leer", leerSolo?"1":"0"); }catch(e){}
+    if(leerSolo) tocar(libro.querySelector(".escuchar")); else pararVoz();
+  };
+  $("#btn-letra").onclick = function(){
+    const g = document.body.classList.toggle("letra-grande"); this.setAttribute("aria-pressed", g);
+    try{ localStorage.setItem("cucu-letra", g?"1":"0"); }catch(e){}
+  };
+
+  // visor de láminas
+  let volverA = null;
+  function abrirVisor(src, alt){
+    volverA = document.activeElement;
+    $("#visor-img").src = src; $("#visor-img").alt = alt||"";
+    $("#visor").classList.add("abierto"); $("#visor-cerrar").focus();
+  }
+  function cerrarVisor(){ $("#visor").classList.remove("abierto"); if(volverA) volverA.focus(); }
+  $("#visor").onclick = cerrarVisor;
+
+  document.title = LIBRO.titulo;
+  ir(desdeAncla());
+})();
+</script>
+</body>
+</html>
