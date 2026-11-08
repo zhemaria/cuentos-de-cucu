@@ -162,6 +162,7 @@ main{flex:1;display:flex;align-items:center;justify-content:center;padding:.5rem
   background:#fff;border:2px solid var(--titulo);border-radius:999px;padding:.3rem 1.1rem .3rem .3rem;cursor:pointer;
 }
 .escuchar img{width:52px;height:52px;border-radius:50%;object-fit:cover;background:#e8f3fa}
+.escuchar .bocina{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;font-size:1.6rem;background:#e8f3fa}
 .escuchar[aria-pressed="true"]{background:var(--titulo);color:#fff}
 .escuchar:hover{box-shadow:0 0 0 4px rgba(11,111,164,.18)}
 
@@ -212,7 +213,7 @@ body.letra-grande{--letra:1.5rem}
   <h1 id="nombre-libro">Israel y su hermanito</h1>
   <a href="../" aria-label="Volver a la biblioteca de cuentos">📚 <span class="txt">Biblioteca</span></a>
   <a href="#indice" aria-label="Ir al índice">☰ <span class="txt">Índice</span></a>
-  <button id="btn-auto" type="button" aria-pressed="false" title="Al pasar la página, Cucu la lee en voz alta" aria-label="Léemelo: Cucu lee cada página al pasarla">🔊 <span class="txt">Léemelo</span></button>
+  <button id="btn-auto" type="button" aria-pressed="false" title="Al pasar la página, se lee en voz alta" aria-label="Léemelo: cada página se lee en voz alta al pasarla">🔊 <span class="txt">Léemelo</span></button>
   <button id="btn-letra" type="button" aria-pressed="false" title="Cambiar el tamaño de la letra" aria-label="Letra más grande">A+ <span class="txt">Letra</span></button>
 </header>
 
@@ -367,10 +368,13 @@ const LIBRO = {
   const capitulos = hojas.map((h,i)=>({h,i})).filter(o=>o.h.tipo==="capitulo");
   const esc = t => String(t).replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
-  function botonEscuchar(audio){
+  // conVozDeCucu: solo la carta, que está narrada con la voz de Zhema
+  function botonEscuchar(audio, conVozDeCucu){
     if(!audio) return "";
-    return `<button class="escuchar" type="button" data-audio="${esc(audio)}" aria-pressed="false">
-      <img src="${esc(LIBRO.avatar)}" alt=""> <span>Escuchar a Cucu</span></button>`;
+    const etiqueta = conVozDeCucu ? "Escuchar a Cucu" : "Escuchar el cuento";
+    const icono = conVozDeCucu ? `<img src="${esc(LIBRO.avatar)}" alt="">` : `<span class="bocina" aria-hidden="true">🔊</span>`;
+    return `<button class="escuchar" type="button" data-audio="${esc(audio)}" data-etiqueta="${etiqueta}" aria-pressed="false">
+      ${icono} <span class="rotulo">${etiqueta}</span></button>`;
   }
   function lamina(img, alt, contener){
     return `<div class="lado lamina${contener?" contener":""}" data-grande="${esc(img)}" role="button" tabindex="0" aria-label="Ver la lámina en grande">
@@ -390,7 +394,7 @@ const LIBRO = {
             <p class="autor">Escrito con cariño por<br><strong>${esc(LIBRO.autor)}</strong></p>
           </div>
           <div class="lado portadilla">
-            <p>Toca <strong>Escuchar a Cucu</strong> en cada página para oír el cuento.</p>
+            <p>Toca <strong>Escuchar el cuento</strong> en cada página para oírlo en voz alta.</p>
             <p>Pasa las páginas con las flechas, con el teclado o deslizando el dedo.</p>
             <p class="licencia">Esta obra está bajo una licencia Creative Commons 4.0 Internacional: Reconocimiento – No Comercial – Compartir Igual.</p>
           </div></div>`;
@@ -407,7 +411,7 @@ const LIBRO = {
           ${lamina(h.img, "Cucu, el bisabuelo de Israel", true)}
           <div class="lado carta"><h2>${esc(h.titulo)}</h2>
           ${h.parrafos.map(p=>`<p>${esc(p)}</p>`).join("")}
-          <p class="firma">${esc(h.firma)}</p>${botonEscuchar(h.audio)}</div></div>`;
+          <p class="firma">${esc(h.firma)}</p>${botonEscuchar(h.audio, true)}</div></div>`;
       case "video":
         return `<div class="hoja sola"><div class="lado video-hoja">
           <video controls preload="none" playsinline poster="${esc(h.poster)}" aria-label="${esc(h.etiqueta)}">
@@ -431,7 +435,7 @@ const LIBRO = {
 
   function pararVoz(){
     voz.pause();
-    document.querySelectorAll(".escuchar").forEach(b=>{b.setAttribute("aria-pressed","false");b.querySelector("span").textContent="Escuchar a Cucu";});
+    document.querySelectorAll(".escuchar").forEach(b=>{b.setAttribute("aria-pressed","false");b.querySelector(".rotulo").textContent=b.dataset.etiqueta;});
   }
 
   function ir(n, sentido){
@@ -508,7 +512,7 @@ const LIBRO = {
     voz.src = src;
     voz.play().then(()=>{
       btn.setAttribute("aria-pressed","true");
-      btn.querySelector("span").textContent = "Pausar";
+      btn.querySelector(".rotulo").textContent = "Pausar";
     }).catch(()=>{});
   }
   voz.addEventListener("ended", pararVoz);
