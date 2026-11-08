@@ -130,13 +130,14 @@ main{flex:1;display:flex;align-items:center;justify-content:center;padding:.5rem
 .portadilla .gran{font-family:"Fredoka",sans-serif;color:var(--titulo);font-size:clamp(2rem,4vw,3.2rem);margin:.2rem 0 1rem}
 .portadilla .autor{font-size:1.3rem}
 .licencia{font-size:.8rem;color:#6b6b6b;margin-top:2rem}
-.indice h2{font-family:"Fredoka",sans-serif;color:var(--titulo);font-size:1.9rem;text-align:center;margin:0 0 1rem}
+.lado.indice{padding:1.6rem 2rem}
+.indice h2{font-family:"Fredoka",sans-serif;color:var(--titulo);font-size:1.7rem;text-align:center;margin:0 0 .8rem}
 .indice ol{list-style:none;margin:0;padding:0;counter-reset:cap}
-.indice li{margin:.35rem 0}
+.indice li{margin:.3rem 0}
 .indice li:not(.ex){counter-increment:cap}
 .indice a{
-  display:flex;gap:.7rem;align-items:center;padding:.55rem .8rem;border-radius:10px;
-  color:var(--tinta);text-decoration:none;font-size:1.12rem;background:#fff;border:1px solid var(--papel-borde);
+  display:flex;gap:.7rem;align-items:center;padding:.45rem .75rem;border-radius:10px;
+  color:var(--tinta);text-decoration:none;font-size:1.05rem;background:#fff;border:1px solid var(--papel-borde);
 }
 .indice a:hover{background:#fff2df}
 .indice a::before{
@@ -190,6 +191,7 @@ main{flex:1;display:flex;align-items:center;justify-content:center;padding:.5rem
   .titulo-portada{left:50%;transform:translateX(-50%);width:max-content;max-width:calc(100% - 2rem)}
   .titulo-portada h2{white-space:normal}
   .titulo-portada p{text-align:center}
+  .indice + .lamina{display:none}
   .hoja.sola{grid-template-rows:1fr}
   .hoja.sola .lado{justify-content:center}
   .hoja.sola .lado.lamina{aspect-ratio:auto;height:100%}
@@ -261,7 +263,7 @@ const LIBRO = {
       "Con todo mi amor,"
     ], firma:"Tu bisabuelo Zhema" },
 
-    { tipo:"indice" },
+    { tipo:"indice", img:"images/4b.png", alt:"Israel imagina a su hermanito en una nube" },
 
     /* ---------- Capítulo 1 ---------- */
     { tipo:"capitulo", id:"cap-1", titulo:"Israel tiene un hermanito", audio:"audio/pag06.mp3", img:"images/1.png" },
@@ -401,10 +403,11 @@ const LIBRO = {
       case "indice": {
         const items = capitulos.map((c,n)=>`<li><a href="#${c.h.id}">${esc(c.h.titulo)}</a></li>`).join("");
         const fin = hojas.findIndex(x=>x.id==="final");
-        return `<div class="hoja sola"><nav class="lado indice" id="indice-nav" aria-label="Índice">
+        return `<div class="hoja"><nav class="lado indice" id="indice-nav" aria-label="Índice">
           <h2>Viajando por el libro</h2>
           <ol><li class="ex"><a class="extra" href="#carta">Mi pequeño Israel</a></li>${items}
-          ${fin>=0?`<li class="ex"><a class="extra" href="#final">El final con video</a></li>`:""}</ol></nav></div>`;
+          ${fin>=0?`<li class="ex"><a class="extra" href="#final">El final con video</a></li>`:""}</ol></nav>
+          ${h.img ? lamina(h.img, h.alt) : ""}</div>`;
       }
       case "carta":
         return `<div class="hoja">
