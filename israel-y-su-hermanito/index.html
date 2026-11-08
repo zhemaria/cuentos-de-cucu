@@ -86,6 +86,13 @@ main{flex:1;display:flex;align-items:center;justify-content:center;padding:.5rem
 .lado.lamina{padding:0;background:#f3ead8;cursor:zoom-in}
 .lado.lamina img{width:100%;height:100%;object-fit:contain;display:block}
 
+.portada .lamina img{object-fit:cover}
+.titulo-portada{position:absolute;left:0;right:0;top:0;padding:1.6rem 1rem 3rem;text-align:center;
+  background:linear-gradient(rgba(255,250,240,.95),rgba(255,250,240,.8) 60%,rgba(255,250,240,0));pointer-events:none}
+.titulo-portada h2{font-family:"Fredoka",sans-serif;color:var(--titulo);font-size:clamp(2.2rem,5vw,3.6rem);margin:0;line-height:1.1}
+.titulo-portada p{margin:.3rem 0 0;font-size:1.25rem;color:var(--acento);font-weight:700}
+.abrir{position:absolute;bottom:1.4rem;left:50%;transform:translateX(-50%);font:inherit;font-weight:700;font-size:1.2rem;
+  color:#fff;background:var(--acento);border:none;border-radius:999px;padding:.7rem 1.6rem;cursor:pointer;box-shadow:0 6px 16px rgba(0,0,0,.3)}
 /* animación de pasar la hoja */
 .hoja.entra-sig{transform-origin:left center;animation:pasarSig .55s ease-out}
 .hoja.entra-ant{transform-origin:right center;animation:pasarAnt .55s ease-out}
@@ -125,7 +132,7 @@ main{flex:1;display:flex;align-items:center;justify-content:center;padding:.5rem
 .carta p{font-size:1.05rem;line-height:1.6;margin:0 0 .7rem}
 .firma{font-family:"Fredoka",sans-serif;color:var(--titulo);font-size:1.35rem;text-align:right}
 .fin{font-family:"Fredoka",sans-serif;color:var(--titulo);font-size:clamp(4rem,10vw,7rem);text-align:center;margin:0}
-.video-hoja{background:#111;display:flex;align-items:center;justify-content:center}
+.lado.video-hoja{padding:0;background:#111;display:flex;align-items:center;justify-content:center}
 .video-hoja video{width:100%;height:100%;object-fit:contain;background:#000}
 
 /* botón de narración */
@@ -159,7 +166,9 @@ main{flex:1;display:flex;align-items:center;justify-content:center;padding:.5rem
   .hoja::after{display:none}
   .lado{padding:1.3rem 1.2rem;justify-content:flex-start}
   .lado.lamina{aspect-ratio:4/3}
+  .hoja.sola{grid-template-rows:1fr}
   .hoja.sola .lado{justify-content:center}
+  .hoja.sola .lado.lamina{aspect-ratio:auto;height:100%}
   .barra{padding:.5rem .75rem;flex-wrap:nowrap;gap:.35rem}
   .barra h1{font-size:1rem;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .barra a,.barra button{padding:.3rem .6rem;flex:none}
@@ -216,7 +225,7 @@ const LIBRO = {
   autor: "José M. Fernández (Cucu)",
   avatar: "images/avatar.png",
   hojas: [
-    { tipo:"portada", img:"images/portada.png", alt:"Portada del libro Israel y su hermanito" },
+    { tipo:"portada", img:"images/001.png", alt:"Cucu le lee a Israel un libro con su nombre" },
 
     { tipo:"portadilla" },
 
@@ -230,7 +239,7 @@ const LIBRO = {
 
     { tipo:"indice" },
 
-    { tipo:"video", src:"video/cuento_Israel2.mp4", poster:"video/poster/001.png", etiqueta:"Video de presentación del cuento" },
+    { tipo:"video", src:"video/cuento_Israel2.mp4", poster:"images/001.png", etiqueta:"Cucu presenta el cuento" },
 
     /* ---------- Capítulo 1 ---------- */
     { tipo:"capitulo", id:"cap-1", titulo:"Israel tiene un hermanito", audio:"audio/pag06.mp3", img:"images/1.png" },
@@ -311,8 +320,7 @@ const LIBRO = {
     { tipo:"pagina", audio:"audio/pag78.mp3", img:"images/36.png", texto:
       "Después de la ceremonia, todos lo abrazaron con alegría. La familia organizó una fiesta con globos y pastel de colores. Israel se sintió rodeado de amor y apoyo. ¡Era un día muy feliz para él! Y mientras disfrutaba de la fiesta, supo que siempre seguiría aprendiendo y creciendo, porque la aventura apenas comenzaba." },
 
-    { tipo:"video", id:"final", src:"video/Israel_End.mp4", poster:"video/poster/998B.png", etiqueta:"Video final del cuento" },
-    { tipo:"video", src:"video/final.mp4", poster:"video/poster/998A.png", etiqueta:"Despedida" },
+    { tipo:"video", id:"final", src:"video/final.mp4", poster:"images/998.png", etiqueta:"Despedida de Cucu" },
     { tipo:"fin", audio:"audio/pag80.mp3" }
   ]
 };
@@ -351,7 +359,9 @@ const LIBRO = {
   function pintar(h, i){
     switch(h.tipo){
       case "portada":
-        return `<div class="hoja sola">${lamina(h.img, h.alt, true)}</div>`;
+        return `<div class="hoja sola portada">${lamina(h.img, h.alt)}
+          <div class="titulo-portada"><h2>${esc(LIBRO.titulo)}</h2><p>Un cuento de Cucu</p></div>
+          <button class="abrir" type="button" data-ir="1">Abrir el libro ›</button></div>`;
       case "portadilla":
         return `<div class="hoja">
           <div class="lado portadilla">
@@ -454,6 +464,7 @@ const LIBRO = {
 
   libro.addEventListener("click", e=>{
     const b = e.target.closest(".escuchar"); if(b){ tocar(b); return; }
+    const a = e.target.closest("[data-ir]"); if(a){ ir(+a.dataset.ir, 1); return; }
     const l = e.target.closest("[data-grande]"); if(l) abrirVisor(l.dataset.grande, l.querySelector("img").alt);
   });
   libro.addEventListener("keydown", e=>{
