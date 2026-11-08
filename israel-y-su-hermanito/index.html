@@ -65,7 +65,7 @@ main{flex:1;display:flex;align-items:center;justify-content:center;padding:.5rem
 }
 .flecha:disabled{opacity:.3;cursor:default}
 .libro{
-  position:relative;width:min(1100px,100%);
+  position:relative;width:min(1400px,100%);
   aspect-ratio:16/10;max-height:calc(100dvh - 150px);
   perspective:4200px;
 }
@@ -144,11 +144,13 @@ main{flex:1;display:flex;align-items:center;justify-content:center;padding:.5rem
   display:grid;place-items:center;background:var(--titulo);color:#fff;font-weight:700;
 }
 .indice a.extra::before{content:"♥";background:var(--acento)}
-.lado.carta{justify-content:flex-start}
+.lado.carta{justify-content:safe center;padding:1.6rem 2.2rem}
+.carta .escuchar{margin-top:.2rem}
 .lado.cuento{justify-content:safe center}
-.carta h2{font-family:"Fredoka",sans-serif;color:var(--titulo);margin:0 0 .8rem;font-size:1.7rem}
-.carta p{font-size:1.05rem;line-height:1.6;margin:0 0 .7rem}
-.firma{font-family:"Fredoka",sans-serif;color:var(--titulo);font-size:1.35rem;text-align:right}
+.carta h2{font-family:"Fredoka",sans-serif;color:var(--titulo);margin:0 0 .6em;font-size:1.55em}
+.carta p{font-size:1em;line-height:1.55;margin:0 0 .6em}
+.lado.carta{font-size:1.05rem}
+.firma{font-family:"Fredoka",sans-serif;color:var(--titulo);font-size:1.25em;text-align:right}
 .fin{font-family:"Fredoka",sans-serif;color:var(--titulo);font-size:clamp(4rem,10vw,7rem);text-align:center;margin:0}
 .lado.video-hoja{padding:0;background:#111;display:flex;align-items:center;justify-content:center}
 .video-hoja video{width:100%;height:100%;object-fit:contain;background:#000}
@@ -250,7 +252,7 @@ const LIBRO = {
 
     { tipo:"portadilla" },
 
-    { tipo:"carta", img:"images/997.png", audio:"audio/pag00.mp3", titulo:"Mi pequeño Israel", parrafos:[
+    { tipo:"carta", img:"images/997.png", audio:"audio/carta.mp3", titulo:"Mi pequeño Israel", parrafos:[
       "Este libro lo he creado especialmente para ti, celebrando tu graduación de Kindergarten. He intentado capturar los momentos más especiales que has vivido desde que supiste que tendrías un hermanito hasta este gran día en que te has convertido en un «niño grande» graduado.",
       "¿Recuerdas cuando te contaron que Adrián vendría a tu vida? ¿Tus preguntas y curiosidad? Ahora eres el mejor hermano mayor que Adrián podría desear. Me llena de orgullo ver cómo le enseñas palabras nuevas, cómo compartes tus juguetes y cómo le muestras el mundo con tus ojos llenos de maravilla.",
       "Israel, quiero que sepas que la vida es como un gran libro de aventuras, y tú apenas estás comenzando a escribir el tuyo. El primer grado te espera con nuevos amigos, nuevos conocimientos y muchas más aventuras. Lleva contigo la misma curiosidad, generosidad y valentía que has mostrado hasta ahora.",
@@ -458,6 +460,7 @@ const LIBRO = {
     const h = hojas[n];
     const ancla = h.id || (h.tipo==="indice" ? "indice" : h.tipo==="carta" ? "carta" : "pagina-"+(n+1));
     if(location.hash !== "#"+ancla) history.replaceState(null, "", "#"+ancla);
+    ajustarLetra(hoja);
     if(leerSolo && h.audio) tocar(hoja.querySelector(".escuchar"));
   }
 
@@ -486,6 +489,18 @@ const LIBRO = {
     hojaQueGira.addEventListener("animationend", e=>{ if(e.target===hojaQueGira) limpiar(); });
     setTimeout(limpiar, 1200);
   }
+
+  // En pantalla grande, achica la letra de la carta hasta que quepa sin scroll
+  function ajustarLetra(hoja){
+    const lado = hoja.querySelector(".lado.carta");
+    if(!lado || !dosPaginas.matches) { if(lado) lado.style.fontSize=""; return; }
+    let t = 1.15;                       // tamaño inicial (rem)
+    lado.style.fontSize = t + "rem";
+    while(lado.scrollHeight > lado.clientHeight + 1 && t > 0.72){
+      t -= 0.03; lado.style.fontSize = t.toFixed(2) + "rem";
+    }
+  }
+  window.addEventListener("resize", ()=>{ const h=libro.querySelector(".hoja"); if(h) ajustarLetra(h); });
 
   function tocar(btn){
     if(!btn) return;
