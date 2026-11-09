@@ -282,8 +282,8 @@ const LIBRO = {
  "avatar": "images/avatar.png",
  "narracion": {
   "es": false,
-  "en": false,
-  "carta": false
+  "en": ["cap1","1","2","3","4","cap2","5","6","7","8","cap3","9","10","11","12","cap4","13","14","15","16"],
+  "carta": {"es": false, "en": true}
  },
  "hojas": [
   {
@@ -789,7 +789,10 @@ const LIBRO = {
   }
  ]
 };
-/* Cuando lleguen los audios: poner true en narracion. Archivos: audio/es-1.mp3, audio/es-cap1.mp3, audio/en-1.mp3, audio/en-cap1.mp3, audio/es-fin.mp3, audio/en-fin.mp3, audio/carta.mp3 */
+/* NARRACIÓN. En "es"/"en": false = sin audio; true = todas las páginas;
+   o una lista de pistas ya grabadas (["cap1","1","2",...]) mientras se completa.
+   Archivos: audio/es-1.mp3, audio/es-cap1.mp3, audio/en-1.mp3, audio/en-cap1.mp3, audio/es-fin.mp3, audio/en-fin.mp3
+   Carta: "carta": {"es": true/false, "en": true/false} → audio/es-carta.mp3, audio/en-carta.mp3 */
 
 /* =========================================================
    MOTOR DEL LIBRO (no hace falta tocarlo)
@@ -805,8 +808,11 @@ const LIBRO = {
   const tx = (es, en) => EN() ? en : es;
   const campo = (h, c) => EN() ? h[c + "_en"] : h[c];
   function audioDe(h){
-    if(h.tipo === "carta") return LIBRO.narracion.carta ? "audio/carta.mp3" : "";
-    if(!h.pista || !LIBRO.narracion[idioma]) return "";
+    const n = LIBRO.narracion;
+    if(h.tipo === "carta") return (n.carta && n.carta[idioma]) ? `audio/${idioma}-carta.mp3` : "";
+    const pistas = n[idioma];
+    if(!h.pista || !pistas) return "";
+    if(Array.isArray(pistas) && !pistas.includes(h.pista)) return "";
     return `audio/${idioma}-${h.pista}.mp3`;
   }
 
@@ -971,7 +977,7 @@ const LIBRO = {
     voz.src = src;
     voz.play().then(()=>{
       btn.setAttribute("aria-pressed","true");
-      btn.querySelector(".rotulo").textContent = "Pausar";
+      btn.querySelector(".rotulo").textContent = tx("Pausar","Pause");
     }).catch(()=>{});
   }
   voz.addEventListener("ended", pararVoz);
