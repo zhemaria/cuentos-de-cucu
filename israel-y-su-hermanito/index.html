@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Israel y su hermanito</title>
-<meta name="description" content="Un cuento ilustrado y narrado por Cucu para Israel.">
+<meta name="description" content="Un cuento ilustrado y narrado por Cucu para Israel, en español y en inglés.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Fredoka:wght@500;600&display=swap" rel="stylesheet">
@@ -23,7 +23,7 @@
   --acento:#e8792b;
   --boton:#ffffff;
   --sombra:0 18px 40px rgba(0,0,0,.35);
-  --letra:1.25rem;
+  --letra:1.7rem;
 }
 *{box-sizing:border-box}
 html,body{margin:0;height:100%}
@@ -153,6 +153,7 @@ main{flex:1;display:flex;align-items:center;justify-content:center;padding:.5rem
 .lado.carta{font-size:1.05rem}
 .firma{font-family:"Fredoka",sans-serif;color:var(--titulo);font-size:1.25em;text-align:right}
 .fin{font-family:"Fredoka",sans-serif;color:var(--titulo);font-size:clamp(4rem,10vw,7rem);text-align:center;margin:0}
+.colorin{font-family:"Fredoka",sans-serif;color:var(--titulo);font-size:clamp(1.9rem,4.5vw,3rem);line-height:1.3;text-align:center;margin:0 0 1.2rem}
 .lado.video-hoja{padding:0;background:#111;display:flex;align-items:center;justify-content:center}
 .video-hoja video{width:100%;height:100%;object-fit:contain;background:#000}
 
@@ -207,7 +208,18 @@ main{flex:1;display:flex;align-items:center;justify-content:center;padding:.5rem
 .pie .tocar button{width:48px;height:48px;border-radius:50%;border:none;background:#fff;color:var(--titulo);font-size:1.5rem;cursor:pointer}
 .pie .tocar button:disabled{opacity:.3}
 
-body.letra-grande{--letra:1.5rem}
+body.letra-grande{--letra:2.1rem}
+#btn-idioma{font-weight:700}
+.indice h2{margin-bottom:.4rem}
+.indice li{margin:.18rem 0}
+.indice a{padding:.2rem .6rem;font-size:1rem}
+.indice a::before{width:1.7rem;height:1.7rem}
+.lado.cuento p{line-height:1.6}
+@media (max-width:820px), (orientation:portrait){
+  .hoja:not(.portada):not(.sola) .lado.lamina{aspect-ratio:auto;height:58dvh}
+  :root{--letra:1.45rem}
+  body.letra-grande{--letra:1.8rem}
+}
 
 /* portada: una sola lámina horizontal, con el título debajo */
 .hoja.portada{display:flex;flex-direction:column;overflow:hidden}
@@ -230,8 +242,9 @@ body.letra-grande{--letra:1.5rem}
 
 <header class="barra">
   <h1 id="nombre-libro">Israel y su hermanito</h1>
-  <a href="../" aria-label="Volver a la biblioteca de cuentos">📚 <span class="txt">Biblioteca</span></a>
-  <a href="#indice" aria-label="Ir al índice">☰ <span class="txt">Índice</span></a>
+  <a id="lnk-bib" href="../" aria-label="Volver a la biblioteca de cuentos">📚 <span class="txt">Biblioteca</span></a>
+  <a id="lnk-ind" href="#indice" aria-label="Ir al índice">☰ <span class="txt">Índice</span></a>
+  <button id="btn-idioma" type="button" lang="en">English</button>
   <button id="btn-auto" type="button" aria-pressed="false" title="Al pasar la página, se lee en voz alta" aria-label="Léemelo: cada página se lee en voz alta al pasarla">🔊 <span class="txt">Léemelo</span></button>
   <button id="btn-letra" type="button" aria-pressed="false" title="Cambiar el tamaño de la letra" aria-label="Letra más grande">A+ <span class="txt">Letra</span></button>
 </header>
@@ -264,107 +277,481 @@ body.letra-grande{--letra:1.5rem}
    Para un cuento nuevo basta con copiar esta carpeta y cambiar LIBRO.
    ========================================================= */
 const LIBRO = {
-  titulo: "Israel y su hermanito",
-  autor: "José M. Fernández (Cucu)",
-  avatar: "images/avatar.png",
-  hojas: [
-    { tipo:"portada", img:"images/portada.jpg", alt:"Cucu, sentado en su sillón, le lee a Israel un libro con su nombre" },
-
-    { tipo:"portadilla" },
-
-    { tipo:"carta", img:"images/997.png", audio:"audio/carta.mp3", titulo:"Mi pequeño Israel", parrafos:[
-      "Este libro lo he creado especialmente para ti, celebrando tu graduación de Kindergarten. He intentado capturar los momentos más especiales que has vivido desde que supiste que tendrías un hermanito hasta este gran día en que te has convertido en un «niño grande» graduado.",
-      "¿Recuerdas cuando te contaron que Adrián vendría a tu vida? ¿Tus preguntas y curiosidad? Ahora eres el mejor hermano mayor que Adrián podría desear. Me llena de orgullo ver cómo le enseñas palabras nuevas, cómo compartes tus juguetes y cómo le muestras el mundo con tus ojos llenos de maravilla.",
-      "Israel, quiero que sepas que la vida es como un gran libro de aventuras, y tú apenas estás comenzando a escribir el tuyo. El primer grado te espera con nuevos amigos, nuevos conocimientos y muchas más aventuras. Lleva contigo la misma curiosidad, generosidad y valentía que has mostrado hasta ahora.",
-      "Algún día, cuando seas mayor, espero que al hojear estas páginas recuerdes no solo las historias que cuentan, sino también cuánto te he querido y cómo he disfrutado viendo crecer a mi maravilloso biznieto.",
-      "Con todo mi amor,"
-    ], firma:"Tu bisabuelo Zhema" },
-
-    { tipo:"indice", img:"images/4b.png", alt:"Israel imagina a su hermanito en una nube" },
-
-    /* ---------- Capítulo 1 ---------- */
-    { tipo:"capitulo", id:"cap-1", titulo:"Israel tiene un hermanito", audio:"audio/pag06.mp3", img:"images/1.png" },
-    { tipo:"pagina", audio:"audio/pag08.mp3", img:"images/2.png", texto:
-      "Había una vez un niño llamado Israel, que tenía tres años y un cabello negro como la noche. Él vivía con su mamá y su papá en una casa llena de risas y juguetes. Un día, su mamá le dijo que estaba esperando un hermanito. Israel no sabía qué significaba eso, así que miró a su mamá con curiosidad y un poco de preocupación." },
-    { tipo:"pagina", audio:"audio/pag10.mp3", img:"images/3.png", texto:
-      "—¿Qué es un hermanito? —preguntó Israel, frunciendo el ceño. Su mamá se agachó junto a él y respondió: —Un hermanito es como un nuevo mejor amigo que vivirá con nosotros. Podrá jugar contigo y compartir tus juguetes. Israel se imaginó tener a alguien con quien jugar y sintió una pequeña chispa de emoción, aunque también un poco de miedo porque no sabía cómo sería." },
-    { tipo:"pagina", audio:"audio/pag12.mp3", img:"images/4.png", texto:
-      "Esa noche, mientras cenaban, su papá le dijo: —Tu hermanito necesitará mucho cuidado, igual que cuando eras un bebé. Israel pensó en cómo sus papás siempre cuidaban de él, y se dio cuenta de que eso no cambiaría; simplemente habría un segundo niño al que también atender. —¿Me dejarán jugar a la pelota con él? —preguntó Israel, y sus padres rieron, prometiéndole que un día sí." },
-    /* PENDIENTE: audio/pag14.mp3 (lámina 4b) — confirmar con Zhema si narra otro texto */
-    { tipo:"pagina", audio:"audio/pag16.mp3", img:"images/5.png", texto:
-      "Pasaron las semanas y, aunque Israel a veces se sentía un poco celoso, su mamá siempre le hablaba de lo genial que sería tener un hermano pequeño. —Juntos podrán hacer mil aventuras —le decía. Y aunque no lo podía ver aún, Israel empezó a imaginar todas las cosas divertidas que haría con su hermanito, desde construir castillos de almohadas hasta jugar al escondite." },
-    { tipo:"pagina", audio:"audio/pag18.mp3", img:"images/6.png", texto:
-      "Finalmente, llegó el gran día. Israel conoció a su hermano, que era un pequeño bebé con unas manitas regordetas. Se sintió feliz y lleno de amor por aquel pequeño ser. —¡Hola, hermanito! —le dijo Israel con una gran sonrisa. De repente, entendió que tener un hermano era como tener un nuevo compañero de aventuras. Y, desde ese momento, su corazón se llenó de alegría al pensar en todas las travesuras que harían juntos." },
-
-    /* ---------- Capítulo 2 ---------- */
-    { tipo:"capitulo", id:"cap-2", titulo:"Israel y su nuevo hermanito", audio:"audio/pag20.mp3", img:"images/7.png" },
-    { tipo:"pagina", audio:"audio/pag22.mp3", img:"images/8.png", texto:
-      "Israel se sintió muy feliz con su nuevo hermanito llamado Adrián. ¡Era tan pequeñito! Pero Israel empezó a notar que sus papás pasaban mucho tiempo con Adrián, llevándolo en brazos, jugando con él y dándole muchos abrazos. Israel no entendía por qué todos se fijaban tanto en su nuevo hermanito y empezó a sentir un poco de celos." },
-    { tipo:"pagina", audio:"audio/pag24.mp3", img:"images/9.png", texto:
-      "Un día, mientras su mamá estaba cargando a Adrián, Israel se acercó y, haciendo pucheros, le dijo: —¡Yo también quiero que me carguen! Su mamá le sonrió y le explicó: —Adrián es muy chiquitito, necesita más ayuda. ¡Pero tú eres un niño grande y fuerte! A Israel le gustó lo que escuchó, pero aún no podía evitar pensar que era menos especial que su hermanito." },
-    { tipo:"pagina", audio:"audio/pag26.mp3", img:"images/10.png", texto:
-      "Sus papás vieron que Israel estaba un poco triste y decidieron hablar con él. Su papá se agachó a su altura y le dijo: —Israel, tú sigues siendo nuestro niño especial. A veces, los bebés necesitan un poco más de atención. Pero siempre habrá un lugar grande y cálido para ti en nuestros brazos. Israel empezó a sentir que no tenía que preocuparse: sus papás lo querían tanto como a Adrián." },
-    { tipo:"pagina", audio:"audio/pag28.mp3", img:"images/11.png", texto:
-      "Días después, Israel tuvo una idea brillante. Fue corriendo a buscar su peluche favorito y se lo dio a Adrián. —Este es mi amigo, puedes jugar con él, ¡pero a mí también me necesitas! —dijo con una sonrisa. Sus papás aplaudieron y le dijeron que era muy generoso. Desde entonces, Israel comenzó a jugar con Adrián y se dio cuenta de que ser hermano mayor era una aventura muy divertida." },
-    { tipo:"pagina", audio:"audio/pag30.mp3", img:"images/12.png", texto:
-      "Con el tiempo, Israel aprendió que tener un hermanito no significaba tener menos amor, sino que el amor se multiplicaba. Ahora, siempre que sus papás cargaban a Adrián, Israel se unía a ellos con gusto, porque sabía que ellos también estaban allí para él. Y así, con risas y juegos, Israel y Adrián se convirtieron en los mejores amigos, mostrando al mundo que el amor de una familia nunca se divide: ¡se multiplica!" },
-
-    /* ---------- Capítulo 3 ---------- */
-    { tipo:"capitulo", id:"cap-3", titulo:"Las aventuras de Israel y Adrián", audio:"audio/pag32.mp3", img:"images/13.png" },
-    { tipo:"pagina", audio:"audio/pag34.mp3", img:"images/14.png", texto:
-      "En un soleado día de primavera, Israel decidió que era el momento perfecto para jugar con su hermanito Adrián. Con un año de edad, Adrián ya era un niño fuerte y curioso. Sus ojos brillaban de emoción cada vez que veía a su hermano mayor acercarse. Israel sonrió y pensó en las muchas aventuras que podrían tener juntos, así que se sentó en el suave césped del jardín y lo llamó: —¡Adrián, ven aquí! ¡Vamos a jugar!" },
-    { tipo:"pagina", audio:"audio/pag36.mp3", img:"images/15.png", texto:
-      "Israel comenzó a enseñarle palabras divertidas. —Di «pelota» —le dijo mientras sostenía una colorida pelota que rebotaba con un sonido mágico. Adrián miró la pelota con atención y, con un poco de esfuerzo, dijo: —Pe-po-ta. Ambos se rieron a carcajadas, y esto hizo que sus papás se acercaran a ver qué sucedía. Les encantaba ver cómo sus dos pequeños se divertían juntos." },
-    { tipo:"pagina", audio:"audio/pag38.mp3", img:"images/16.png", texto:
-      "Más tarde, Israel quiso enseñarle a Adrián cómo jugar con los bloques de construcción. Le mostró cómo apilar los bloques uno sobre otro. —Así, mira, hermano —dijo mientras hacía una torre alta. Adrián aplaudió emocionado y, aunque a veces los bloques se caían, él no se desanimaba. Israel lo animó: —¡Buen intento, Adrián! Pronto lo harás muy bien." },
-    { tipo:"pagina", audio:"audio/pag40.mp3", img:"images/17.png", texto:
-      "Al atardecer, sus papás se unieron a ellos e hicieron una casa de campaña como los tipis de los indios sioux. —¡Es nuestra casa de aventuras! —exclamó Israel. Adrián sonrió, sintiéndose parte de algo grandioso. Los tres se acomodaron dentro de la casa de campaña. Papá y mamá comenzaron a contar historias de piratas y tesoros escondidos." },
-    { tipo:"pagina", audio:"audio/pag42.mp3", img:"images/18.png", texto:
-      "Cuando el sol comenzó a ocultarse, Israel y Adrián estaban muy cansados, pero felices. Habían aprendido y jugado juntos todo el día. Sus papás abrazaron a los dos, sintiendo ese amor tan especial entre hermanos. Israel miró a Adrián y le susurró: —Nunca olvides que siempre seré tu compañero de aventuras. Adrián aplaudió y, aunque no lo dijera, en su corazón sabía que eso era cierto. ¡Y así concluyó su divertido día lleno de risas y aprendizaje!" },
-
-    /* ---------- Capítulo 4 ---------- */
-    { tipo:"capitulo", id:"cap-4", titulo:"La primera aventura escolar de Israel", audio:"audio/pag44.mp3", img:"images/19.png" },
-    { tipo:"pagina", audio:"audio/pag46.mp3", img:"images/20.png", texto:
-      "Hoy era un día muy especial para Israel, porque ¡iba a su primer día de escuela! Con una mochila nueva y muchas ganas, se despidió de su mamá y se unió a otros niños que también iban al Kindergarten. Todo era emocionante y nuevo. Al entrar al aula, vio una gran pizarra llena de colores y figuras. La maestra, una amable señora con ojos brillantes, les dio la bienvenida y les dijo que en ese lugar aprenderían muchas cosas divertidas." },
-    { tipo:"pagina", audio:"audio/pag48.mp3", img:"images/21.png", texto:
-      "Durante la mañana, Israel y sus amigos aprendieron los colores. Aprendieron que el mar es azul, el sol es amarillo y las fresas son rojas. Cada niño tuvo que decir su color favorito. Israel sonrió al decir que su color preferido era el azul, como el del cielo. Después de pintar con muchos colores, la maestra les presentó las formas: círculos, cuadrados y triángulos. ¡Qué divertido era aprender jugando!" },
-    { tipo:"pagina", audio:"audio/pag50.mp3", img:"images/22.png", texto:
-      "Más tarde, llegó la hora de los números. Israel contaba con sus deditos y se emocionaba al llegar al diez. La maestra les enseñó a sumar con juguetes, y eso les hizo reír mucho. Al finalizar la clase, todos aprendieron a escribir las letras del abecedario. Israel se sentía cada vez más feliz, sintiendo que cada cosa que aprendía era una nueva aventura." },
-    { tipo:"pagina", audio:"audio/pag52.mp3", img:"images/23.png", texto:
-      "Cuando llegó a casa, Israel no podía esperar para compartir lo que había aprendido. —¡Adrián, ven rápido! —gritó a su hermanito. Juntos se sentaron en la alfombra, e Israel comenzó a enseñarle los colores. —Mira, esta manzana es roja y esta naranja es amarilla. Adrián sonreía. Israel continuaba: —Ese dado que tienes en la mano es azul." },
-    { tipo:"pagina", audio:"audio/pag54.mp3", img:"images/24.png", texto:
-      "Cuando anocheció, Israel y Adrián se fueron a la cama. Como Adrián aún era muy pequeñito, Israel se acostó a su lado para que no tuviera miedo, mientras Adrián abrazaba el osito de peluche que le regaló Israel cuando era pequeñito." },
-
-    /* ---------- Capítulo 5 ---------- */
-    { tipo:"capitulo", id:"cap-5", titulo:"La aventura de Israel y Génesis", audio:"audio/pag56.mp3", img:"images/25.png" },
-    { tipo:"pagina", audio:"audio/pag58.mp3", img:"images/26.png", texto:
-      "Israel estaba muy emocionado porque su prima Génesis venía de México. Era la primera vez que la iba a conocer. Desde que su mamá le contó que iba a visitarles, no podía dejar de pensar en lo divertido que sería jugar juntos. Israel sabía que Génesis era de la misma edad que su hermanito Adrián, y eso lo llenaba de alegría. ¡Tres niños juntos siempre es mejor que uno!" },
-    { tipo:"pagina", audio:"audio/pag60.mp3", img:"images/27.png", texto:
-      "Cuando Génesis llegó, llevaba una sonrisa tan grande que iluminó toda la casa. Israel la miró y pensó que era igualita a la foto que había visto antes. Tenía el cabello rizado y unos ojos brillantes que reflejaban la aventura. —¡Hola, prima! —le dijo Israel, corriendo hacia ella. Génesis le respondió con un abrazo cálido y, en ese momento, Israel supo que se harían grandes amigos." },
-    { tipo:"pagina", audio:"audio/pag62.mp3", img:"images/28.png", texto:
-      "A la mañana siguiente, que era sábado, los tres niños salieron con sus mamás a visitar el Navy Pier de Chicago. Allí disfrutaron corriendo entre los chorros de agua que salían del piso, montaron en la rueda y también en un gran tobogán y una cama elástica. Mientras corrían y reían, Génesis les mostró a Israel y a Adrián un juego que había traído de México: «La carrera de sacos». Aunque al principio se caían y reían, pronto se convirtieron en unos expertos en saltar." },
-    { tipo:"pagina", audio:"audio/pag64.mp3", img:"images/29.png", texto:
-      "A medida que pasaba el día, empezaron a hablar sobre México y sus pueblos mágicos. Génesis les contó sobre las piñatas y la deliciosa comida que había en su país. Israel y Adrián estaban tan asombrados que no dejaban de hacer preguntas, sobre todo cuando Génesis les contó sobre los alebrijes, que son como los ángeles guardianes, pero mexicanos. Cada historia hacía que el corazón de Israel y Adrián se llenara de ganas de conocer México." },
-    { tipo:"pagina", audio:"audio/pag66.mp3", img:"images/30.png", texto:
-      "Al caer la tarde, Israel, Génesis y Adrián se sentaron en la hierba, cansados pero felices. Miraban hacia el cielo, que se llenaba de estrellas. Israel se dio cuenta de que sentía un cariño muy especial por su prima. —Espero que podamos jugar juntos muchas veces más —dijo. Génesis sonrió y le respondió: —¡Así será! ¡Esto es solo el comienzo de nuestras aventuras! Y así, los tres amigos soñaron con la próxima gran fiesta que tendrían cuando los tres estuvieran en México." },
-
-    /* ---------- Capítulo 6 ---------- */
-    { tipo:"capitulo", id:"cap-6", titulo:"La gran graduación de Israel", audio:"audio/pag68.mp3", img:"images/31.png" },
-    { tipo:"pagina", audio:"audio/pag70.mp3", img:"images/32.png", texto:
-      "Israel estaba a punto de graduarse del jardín de infantes. Era un niño muy estudioso e inteligente. Cada día, Israel se esforzaba por aprender cosas nuevas y disfrutar de sus juegos con sus amigos. Sus maestras, Miss Quintero y Miss Hernández, lo querían mucho porque siempre hacía preguntas interesantes y ayudaba a sus compañeros cuando tenían dudas." },
-    { tipo:"pagina", audio:"audio/pag72.mp3", img:"images/33.png", texto:
-      "El día de la graduación, la escuela se llenó de risas y colores. Todos los niños estaban vestidos con trajes bonitos y sus mejores sonrisas. En el teatro de la escuela, las familias esperaban emocionadas. Por fin, comenzaron la ceremonia y los padres aplaudían con orgullo. Israel estaba un poco nervioso, pero Miss Quintero le dio una sonrisa que lo tranquilizó." },
-    { tipo:"pagina", audio:"audio/pag74.mp3", img:"images/34.png", texto:
-      "Entre los asistentes estaban su hermanito Adrián, que lo miraba con admiración, su papá José Armando y su mamá Rosalía; todos sonreían con felicidad. También estaban su abuelo Armando y su bisabuelo Zhema, quienes siempre le contaban historias de cuando ellos eran pequeños. Todos esperaban con ansias el momento de ver a Israel recibir su diploma." },
-    { tipo:"pagina", audio:"audio/pag76.mp3", img:"images/35.png", texto:
-      "Cuando llegó su turno, Israel subió al escenario con paso firme. Miss Quintero y Miss Hernández le entregaron su diploma con una gran sonrisa. Israel se sintió muy feliz y dio una pequeña vuelta para mostrar su felicidad. Todos en la sala aplaudieron y vitorearon su nombre. ¡Era un momento especial que nunca olvidaría!" },
-    { tipo:"pagina", audio:"audio/pag78.mp3", img:"images/36.png", texto:
-      "Después de la ceremonia, todos lo abrazaron con alegría. La familia organizó una fiesta con globos y pastel de colores. Israel se sintió rodeado de amor y apoyo. ¡Era un día muy feliz para él! Y mientras disfrutaba de la fiesta, supo que siempre seguiría aprendiendo y creciendo, porque la aventura apenas comenzaba." },
-
-    { tipo:"video", id:"final", src:"video/final.mp4", poster:"images/998.png", etiqueta:"Despedida de Cucu" },
-    { tipo:"fin", audio:"audio/pag80.mp3" }
-  ]
+ "titulo": "Israel y su hermanito",
+ "titulo_en": "Israel and His Little Brother",
+ "autor": "José M. Fernández (Cucu)",
+ "avatar": "images/avatar.png",
+ "narracion": {
+  "es": [
+   "cap1",
+   "1",
+   "2",
+   "3",
+   "4",
+   "5",
+   "cap2",
+   "6",
+   "7",
+   "8",
+   "9",
+   "10",
+   "cap3",
+   "11",
+   "12",
+   "13",
+   "14",
+   "15",
+   "cap4",
+   "16",
+   "17",
+   "18",
+   "19",
+   "20",
+   "cap5",
+   "21",
+   "22",
+   "23",
+   "24",
+   "25",
+   "cap6",
+   "26",
+   "27",
+   "28",
+   "29",
+   "30",
+   "fin"
+  ],
+  "en": [
+   "cap1",
+   "1",
+   "2",
+   "3",
+   "4",
+   "5",
+   "cap2",
+   "6",
+   "7",
+   "8",
+   "9",
+   "10",
+   "cap3",
+   "11",
+   "12",
+   "13",
+   "14",
+   "15",
+   "cap4",
+   "16",
+   "17",
+   "18",
+   "19",
+   "20",
+   "cap5",
+   "21",
+   "22",
+   "23",
+   "24",
+   "25",
+   "cap6",
+   "26",
+   "27",
+   "28",
+   "29",
+   "30",
+   "fin"
+  ],
+  "carta": {
+   "es": true,
+   "en": true
+  }
+ },
+ "hojas": [
+  {
+   "tipo": "portada",
+   "img": "images/portada.jpg",
+   "alt": "Cucu, sentado en su sillón, le lee un libro a Israel",
+   "alt_en": "Cucu, sitting in his armchair, reads a book to Israel"
+  },
+  {
+   "tipo": "portadilla"
+  },
+  {
+   "tipo": "carta",
+   "img": "images/carta.jpg",
+   "alt": "Cucu escribe una carta en su escritorio",
+   "alt_en": "Cucu writes a letter at his desk",
+   "titulo": "Mi pequeño Israel",
+   "titulo_en": "My little Israel",
+   "parrafos": [
+    "Este libro lo he creado especialmente para ti, celebrando tu graduación de Kindergarten. He intentado capturar los momentos más especiales que has vivido desde que supiste que tendrías un hermanito hasta este gran día en que te has convertido en un «niño grande» graduado.",
+    "¿Recuerdas cuando te contaron que Adrián vendría a tu vida? ¿Tus preguntas y curiosidad? Ahora eres el mejor hermano mayor que Adrián podría desear. Me llena de orgullo ver cómo le enseñas palabras nuevas, cómo compartes tus juguetes y cómo le muestras el mundo con tus ojos llenos de maravilla.",
+    "Israel, quiero que sepas que la vida es como un gran libro de aventuras, y tú apenas estás comenzando a escribir el tuyo. El primer grado te espera con nuevos amigos, nuevos conocimientos y muchas más aventuras. Lleva contigo la misma curiosidad, generosidad y valentía que has mostrado hasta ahora.",
+    "Algún día, cuando seas mayor, espero que al hojear estas páginas recuerdes no solo las historias que cuentan, sino también cuánto te he querido y cómo he disfrutado viendo crecer a mi maravilloso biznieto.",
+    "Con todo mi amor,"
+   ],
+   "parrafos_en": [
+    "I created this book especially for you, to celebrate your kindergarten graduation. I have tried to capture the most special moments of your life, from the day you found out you would have a little brother until this big day when you became a graduated \"big kid.\"",
+    "Do you remember when they told you Adrián was coming into your life? All your questions and curiosity? Now you are the best big brother Adrián could ever wish for. It fills me with pride to see how you teach him new words, how you share your toys and how you show him the world through your eyes full of wonder.",
+    "Israel, I want you to know that life is like a big adventure book, and you are only beginning to write yours. First grade is waiting for you, with new friends, new things to learn and many more adventures. Take with you the same curiosity, generosity and courage you have shown until now.",
+    "Someday, when you are older, I hope that as you look through these pages you will remember not only the stories they tell, but also how much I have loved you and how much I have enjoyed watching my wonderful great-grandson grow up.",
+    "With all my love,"
+   ],
+   "firma": "Tu bisabuelo Zhema",
+   "firma_en": "Your great-grandpa Zhema"
+  },
+  {
+   "tipo": "indice",
+   "img": "images/indice.jpg",
+   "alt": "Toda la familia frente a la casa: Cucu, Mamá, Papá, Buelo, Israel, Adrián y Génesis",
+   "alt_en": "The whole family in front of the house: Cucu, Mom, Dad, Buelo, Israel, Adrián and Génesis"
+  },
+  {
+   "tipo": "capitulo",
+   "id": "cap-1",
+   "titulo": "Israel tiene un hermanito",
+   "titulo_en": "Israel Has a Little Brother",
+   "pista": "cap1",
+   "img": "images/cap1.jpg",
+   "alt": "Israel, sentado en la alfombra, pone la mano en la barriga de su mamá",
+   "alt_en": "Israel, sitting on the rug, puts his hand on his mom's belly"
+  },
+  {
+   "tipo": "pagina",
+   "pista": "1",
+   "img": "images/1.jpg",
+   "alt": "Mamá, sentada en el sofá, le da la noticia a Israel, que la mira curioso",
+   "alt_en": "Mom, sitting on the sofa, tells Israel the news; he looks at her curiously",
+   "texto": "Había una vez un niño llamado Israel, que tenía tres años y un cabello negro como la noche. Él vivía con su mamá y su papá en una casa llena de risas y juguetes. Un día, su mamá le dijo que estaba esperando un hermanito. Israel no sabía qué significaba eso, así que miró a su mamá con curiosidad y un poco de preocupación.",
+   "texto_en": "Once upon a time there was a boy named Israel. He was three years old, and his hair was as black as the night. He lived with his mom and dad in a house full of laughter and toys. One day, his mom told him she was expecting a baby brother. Israel didn't know what that meant, so he looked at his mom with curiosity and a little bit of worry."
+  },
+  {
+   "tipo": "pagina",
+   "pista": "2",
+   "img": "images/2.jpg",
+   "alt": "Mamá se agacha junto a Israel, que imagina a dos niños jugando",
+   "alt_en": "Mom crouches next to Israel, who imagines two boys playing",
+   "texto": "—¿Qué es un hermanito? —preguntó Israel, frunciendo el ceño. Su mamá se agachó junto a él y respondió: —Un hermanito es como un nuevo mejor amigo que vivirá con nosotros. Podrá jugar contigo y compartir tus juguetes. Israel se imaginó tener a alguien con quien jugar y sintió una pequeña chispa de emoción, aunque también un poco de miedo porque no sabía cómo sería.",
+   "texto_en": "\"What's a little brother?\" Israel asked, frowning. His mom crouched down next to him and answered, \"A little brother is like a new best friend who will live with us. He'll be able to play with you and share your toys.\" Israel imagined having someone to play with and felt a tiny spark of excitement, but he was also a little scared, because he didn't know what it would be like."
+  },
+  {
+   "tipo": "pagina",
+   "pista": "3",
+   "img": "images/3.jpg",
+   "alt": "La familia cena de noche; Mamá está embarazada",
+   "alt_en": "The family has dinner at night; Mom is pregnant",
+   "texto": "Esa noche, mientras cenaban, su papá le dijo: —Tu hermanito necesitará mucho cuidado, igual que cuando eras un bebé. Israel pensó en cómo sus papás siempre cuidaban de él, y se dio cuenta de que eso no cambiaría; simplemente habría un segundo niño al que también atender. —¿Me dejarán jugar a la pelota con él? —preguntó Israel, y sus padres rieron, prometiéndole que un día sí.",
+   "texto_en": "That night, during dinner, his dad told him, \"Your little brother will need a lot of care, just like you did when you were a baby.\" Israel thought about how his parents always took care of him, and he realized that wouldn't change: there would just be a second child to look after too. \"Will you let me play ball with him?\" Israel asked, and his parents laughed and promised that one day he could."
+  },
+  {
+   "tipo": "pagina",
+   "pista": "4",
+   "img": "images/4.jpg",
+   "alt": "Israel apoya la cabeza en la barriga de Mamá, junto a un castillo de almohadas",
+   "alt_en": "Israel rests his head on Mom's belly, next to a pillow fort",
+   "texto": "Pasaron las semanas y, aunque Israel a veces se sentía un poco celoso, su mamá siempre le hablaba de lo genial que sería tener un hermano pequeño. —Juntos podrán hacer mil aventuras —le decía. Y aunque no lo podía ver aún, Israel empezó a imaginar todas las cosas divertidas que haría con su hermanito, desde construir castillos de almohadas hasta jugar al escondite.",
+   "texto_en": "Weeks went by, and even though Israel sometimes felt a little jealous, his mom always told him how great it would be to have a little brother. \"Together you'll have a thousand adventures,\" she would say. And even though he couldn't see him yet, Israel began to imagine all the fun things he would do with his little brother, from building pillow forts to playing hide-and-seek."
+  },
+  {
+   "tipo": "pagina",
+   "pista": "5",
+   "img": "images/5.jpg",
+   "alt": "En el hospital, Israel saluda a su hermanito recién nacido",
+   "alt_en": "At the hospital, Israel says hello to his newborn brother",
+   "texto": "Finalmente, llegó el gran día. Israel conoció a su hermano, que era un pequeño bebé con unas manitas regordetas. Se sintió feliz y lleno de amor por aquel pequeño ser. —¡Hola, hermanito! —le dijo Israel con una gran sonrisa. De repente, entendió que tener un hermano era como tener un nuevo compañero de aventuras. Y, desde ese momento, su corazón se llenó de alegría al pensar en todas las travesuras que harían juntos.",
+   "texto_en": "At last, the big day arrived. Israel met his brother, a tiny baby with chubby little hands. He felt happy and full of love for that little one. \"Hi, little brother!\" Israel said with a big smile. Suddenly, he understood that having a brother was like having a new adventure buddy. And from that moment on, his heart filled with joy as he thought about all the fun mischief they would get up to together."
+  },
+  {
+   "tipo": "capitulo",
+   "id": "cap-2",
+   "titulo": "Israel y su nuevo hermanito",
+   "titulo_en": "Israel and His New Baby Brother",
+   "pista": "cap2",
+   "img": "images/cap2.jpg",
+   "alt": "Israel mira a su hermanito recién nacido, que duerme en la cuna",
+   "alt_en": "Israel looks at his newborn baby brother sleeping in the crib"
+  },
+  {
+   "tipo": "pagina",
+   "pista": "6",
+   "img": "images/6.jpg",
+   "alt": "Papá y Mamá miman al bebé mientras Israel los mira un poco triste",
+   "alt_en": "Mom and Dad cuddle the baby while Israel watches, a little sad",
+   "texto": "Israel se sintió muy feliz con su nuevo hermanito llamado Adrián. ¡Era tan pequeñito! Pero Israel empezó a notar que sus papás pasaban mucho tiempo con Adrián, llevándolo en brazos, jugando con él y dándole muchos abrazos. Israel no entendía por qué todos se fijaban tanto en su nuevo hermanito y empezó a sentir un poco de celos.",
+   "texto_en": "Israel was very happy with his new baby brother, whose name was Adrián. He was so tiny! But Israel started to notice that his parents spent a lot of time with Adrián, carrying him, playing with him and giving him lots of hugs. Israel didn't understand why everyone paid so much attention to his new little brother, and he started to feel a little jealous."
+  },
+  {
+   "tipo": "pagina",
+   "pista": "7",
+   "img": "images/7.jpg",
+   "alt": "Israel, con los brazos cruzados, mientras Mamá carga a Adrián",
+   "alt_en": "Israel, with his arms crossed, while Mom holds Adrián",
+   "texto": "Un día, mientras su mamá estaba cargando a Adrián, Israel se acercó y, haciendo pucheros, le dijo: —¡Yo también quiero que me carguen! Su mamá le sonrió y le explicó: —Adrián es muy chiquitito, necesita más ayuda. ¡Pero tú eres un niño grande y fuerte! A Israel le gustó lo que escuchó, pero aún no podía evitar pensar que era menos especial que su hermanito.",
+   "texto_en": "One day, while his mom was holding Adrián, Israel came closer and, pouting, said, \"I want to be held too!\" His mom smiled and explained, \"Adrián is very little; he needs more help. But you are a big, strong boy!\" Israel liked what he heard, but he still couldn't help thinking that he was less special than his little brother."
+  },
+  {
+   "tipo": "pagina",
+   "pista": "8",
+   "img": "images/8.jpg",
+   "alt": "Papá, arrodillado, habla con cariño con Israel",
+   "alt_en": "Dad kneels and talks lovingly with Israel",
+   "texto": "Sus papás vieron que Israel estaba un poco triste y decidieron hablar con él. Su papá se agachó a su altura y le dijo: —Israel, tú sigues siendo nuestro niño especial. A veces, los bebés necesitan un poco más de atención. Pero siempre habrá un lugar grande y cálido para ti en nuestros brazos. Israel empezó a sentir que no tenía que preocuparse: sus papás lo querían tanto como a Adrián.",
+   "texto_en": "His parents saw that Israel was a little sad, and they decided to talk with him. His dad crouched down to his level and said, \"Israel, you are still our special boy. Sometimes babies need a little more attention. But there will always be a big, warm place for you in our arms.\" Israel began to feel that he didn't need to worry: his parents loved him just as much as Adrián."
+  },
+  {
+   "tipo": "pagina",
+   "pista": "9",
+   "img": "images/9.jpg",
+   "alt": "Israel le regala su osito a Adrián y sus papás aplauden",
+   "alt_en": "Israel gives his teddy bear to Adrián and his parents clap",
+   "texto": "Días después, Israel tuvo una idea brillante. Fue corriendo a buscar su peluche favorito y se lo dio a Adrián. —Este es mi amigo, puedes jugar con él, ¡pero a mí también me necesitas! —dijo con una sonrisa. Sus papás aplaudieron y le dijeron que era muy generoso. Desde entonces, Israel comenzó a jugar con Adrián y se dio cuenta de que ser hermano mayor era una aventura muy divertida.",
+   "texto_en": "A few days later, Israel had a brilliant idea. He ran to get his favorite stuffed animal and gave it to Adrián. \"This is my friend. You can play with him, but you need me too!\" he said with a smile. His parents clapped and told him he was very generous. From then on, Israel began to play with Adrián, and he discovered that being a big brother was a really fun adventure."
+  },
+  {
+   "tipo": "pagina",
+   "pista": "10",
+   "img": "images/10.jpg",
+   "alt": "La familia se abraza en el sofá",
+   "alt_en": "The family hugs on the sofa",
+   "texto": "Con el tiempo, Israel aprendió que tener un hermanito no significaba tener menos amor, sino que el amor se multiplicaba. Ahora, siempre que sus papás cargaban a Adrián, Israel se unía a ellos con gusto, porque sabía que ellos también estaban allí para él. Y así, con risas y juegos, Israel y Adrián se convirtieron en los mejores amigos, mostrando al mundo que el amor de una familia nunca se divide: ¡se multiplica!",
+   "texto_en": "With time, Israel learned that having a little brother didn't mean having less love: love multiplied. Now, whenever his parents held Adrián, Israel happily joined them, because he knew they were there for him too. And so, with laughter and games, Israel and Adrián became best friends, showing the world that a family's love never divides: it multiplies!"
+  },
+  {
+   "tipo": "capitulo",
+   "id": "cap-3",
+   "titulo": "Las aventuras de Israel y Adrián",
+   "titulo_en": "The Adventures of Israel and Adrián",
+   "pista": "cap3",
+   "img": "images/cap3.jpg",
+   "alt": "Israel y Adrián bebé juegan con una pelota de colores en el jardín",
+   "alt_en": "Israel and baby Adrián play with a colorful ball in the backyard"
+  },
+  {
+   "tipo": "pagina",
+   "pista": "11",
+   "img": "images/11.jpg",
+   "alt": "En el jardín, Israel llama a Adrián, que gatea hacia él",
+   "alt_en": "In the backyard, Israel calls Adrián, who crawls toward him",
+   "texto": "En un soleado día de primavera, Israel decidió que era el momento perfecto para jugar con su hermanito Adrián. Con un año de edad, Adrián ya era un niño fuerte y curioso. Sus ojos brillaban de emoción cada vez que veía a su hermano mayor acercarse. Israel sonrió y pensó en las muchas aventuras que podrían tener juntos, así que se sentó en el suave césped del jardín y lo llamó: —¡Adrián, ven aquí! ¡Vamos a jugar!",
+   "texto_en": "On a sunny spring day, Israel decided it was the perfect time to play with his little brother Adrián. At one year old, Adrián was already a strong and curious little boy. His eyes sparkled with excitement every time he saw his big brother coming. Israel smiled and thought about all the adventures they could have together, so he sat down on the soft grass in the backyard and called him: \"Adrián, come here! Let's play!\""
+  },
+  {
+   "tipo": "pagina",
+   "pista": "12",
+   "img": "images/12.jpg",
+   "alt": "Israel le enseña la pelota a Adrián mientras sus papás se acercan",
+   "alt_en": "Israel shows Adrián the ball while their parents come over",
+   "texto": "Israel comenzó a enseñarle palabras divertidas. —Di «pelota» —le dijo mientras sostenía una colorida pelota que rebotaba con un sonido mágico. Adrián miró la pelota con atención y, con un poco de esfuerzo, dijo: —Pe-po-ta. Ambos se rieron a carcajadas, y esto hizo que sus papás se acercaran a ver qué sucedía. Les encantaba ver cómo sus dos pequeños se divertían juntos.",
+   "texto_en": "Israel began teaching him fun words. \"Say 'pelota,'\" he told him (that means \"ball\" in Spanish), holding up a colorful ball that bounced with a magical sound. Adrián looked at the ball carefully and, with a little effort, said, \"Pe-po-ta.\" They both burst out laughing, and that made their parents come over to see what was going on. They loved watching their two little boys having fun together."
+  },
+  {
+   "tipo": "pagina",
+   "pista": "13",
+   "img": "images/13.jpg",
+   "alt": "Israel hace una torre de bloques y Adrián aplaude",
+   "alt_en": "Israel builds a tower of blocks and Adrián claps",
+   "texto": "Más tarde, Israel quiso enseñarle a Adrián cómo jugar con los bloques de construcción. Le mostró cómo apilar los bloques uno sobre otro. —Así, mira, hermano —dijo mientras hacía una torre alta. Adrián aplaudió emocionado y, aunque a veces los bloques se caían, él no se desanimaba. Israel lo animó: —¡Buen intento, Adrián! Pronto lo harás muy bien.",
+   "texto_en": "Later, Israel wanted to teach Adrián how to play with building blocks. He showed him how to stack the blocks one on top of another. \"Like this, look, brother,\" he said as he built a tall tower. Adrián clapped excitedly, and even though the blocks sometimes fell down, he didn't give up. Israel cheered him on: \"Good try, Adrián! Soon you'll do it really well.\""
+  },
+  {
+   "tipo": "pagina",
+   "pista": "14",
+   "img": "images/14.jpg",
+   "alt": "La familia, dentro de una tienda en el jardín al atardecer",
+   "alt_en": "The family inside a tent in the backyard at sunset",
+   "texto": "Al atardecer, sus papás se unieron a ellos e hicieron una casa de campaña como los tipis de los indios sioux. —¡Es nuestra casa de aventuras! —exclamó Israel. Adrián sonrió, sintiéndose parte de algo grandioso. Los tres se acomodaron dentro de la casa de campaña. Papá y mamá comenzaron a contar historias de piratas y tesoros escondidos.",
+   "texto_en": "At sunset, their parents joined them and made a tent like the tipis of the Sioux people. \"It's our adventure house!\" Israel exclaimed. Adrián smiled, feeling part of something wonderful. They all snuggled up inside the tent. Mom and Dad began telling stories about pirates and hidden treasure."
+  },
+  {
+   "tipo": "pagina",
+   "pista": "15",
+   "img": "images/15.jpg",
+   "alt": "Los papás abrazan a Israel y a Adrián al anochecer",
+   "alt_en": "Mom and Dad hug Israel and Adrián at dusk",
+   "texto": "Cuando el sol comenzó a ocultarse, Israel y Adrián estaban muy cansados, pero felices. Habían aprendido y jugado juntos todo el día. Sus papás abrazaron a los dos, sintiendo ese amor tan especial entre hermanos. Israel miró a Adrián y le susurró: —Nunca olvides que siempre seré tu compañero de aventuras. Adrián aplaudió y, aunque no lo dijera, en su corazón sabía que eso era cierto. ¡Y así concluyó su divertido día lleno de risas y aprendizaje!",
+   "texto_en": "When the sun began to set, Israel and Adrián were very tired, but happy. They had learned and played together all day long. Their parents hugged them both, feeling that very special love between brothers. Israel looked at Adrián and whispered, \"Never forget that I'll always be your adventure buddy.\" Adrián clapped, and even though he couldn't say it, in his heart he knew it was true. And that's how their fun day full of laughter and learning came to an end!"
+  },
+  {
+   "tipo": "capitulo",
+   "id": "cap-4",
+   "titulo": "La primera aventura escolar de Israel",
+   "titulo_en": "Israel's First School Adventure",
+   "pista": "cap4",
+   "img": "images/cap4.jpg",
+   "alt": "Israel saluda frente a su casa, con su mochila nueva, el primer día de escuela",
+   "alt_en": "Israel waves in front of his house with his new backpack on his first day of school"
+  },
+  {
+   "tipo": "pagina",
+   "pista": "16",
+   "img": "images/16.jpg",
+   "alt": "Miss Quintero da la bienvenida a Israel en el salón de kínder",
+   "alt_en": "Miss Quintero welcomes Israel to the kindergarten classroom",
+   "texto": "Hoy era un día muy especial para Israel, porque ¡iba a su primer día de escuela! Con una mochila nueva y muchas ganas, se despidió de su mamá y se unió a otros niños que también iban al Kindergarten. Todo era emocionante y nuevo. Al entrar al aula, vio una gran pizarra llena de colores y figuras. La maestra, una amable señora con ojos brillantes, les dio la bienvenida y les dijo que en ese lugar aprenderían muchas cosas divertidas.",
+   "texto_en": "Today was a very special day for Israel, because it was his first day of school! With a new backpack and lots of excitement, he said goodbye to his mom and joined the other children who were also going to kindergarten. Everything was exciting and new. When he walked into the classroom, he saw a big board full of colors and shapes. The teacher, a kind lady with sparkling eyes, welcomed them and told them that in this place they would learn lots of fun things."
+  },
+  {
+   "tipo": "pagina",
+   "pista": "17",
+   "img": "images/17.jpg",
+   "alt": "Israel muestra su pintura de un cielo azul",
+   "alt_en": "Israel shows his painting of a blue sky",
+   "texto": "Durante la mañana, Israel y sus amigos aprendieron los colores. Aprendieron que el mar es azul, el sol es amarillo y las fresas son rojas. Cada niño tuvo que decir su color favorito. Israel sonrió al decir que su color preferido era el azul, como el del cielo. Después de pintar con muchos colores, la maestra les presentó las formas: círculos, cuadrados y triángulos. ¡Qué divertido era aprender jugando!",
+   "texto_en": "During the morning, Israel and his friends learned the colors. They learned that the sea is blue, the sun is yellow and strawberries are red. Each child had to say their favorite color. Israel smiled as he said that his favorite color was blue, like the sky. After painting with lots of colors, the teacher showed them the shapes: circles, squares and triangles. Learning through play was so much fun!"
+  },
+  {
+   "tipo": "pagina",
+   "pista": "18",
+   "img": "images/18.jpg",
+   "alt": "Israel cuenta con los dedos hasta diez",
+   "alt_en": "Israel counts to ten on his fingers",
+   "texto": "Más tarde, llegó la hora de los números. Israel contaba con sus deditos y se emocionaba al llegar al diez. La maestra les enseñó a sumar con juguetes, y eso les hizo reír mucho. Al finalizar la clase, todos aprendieron a escribir las letras del abecedario. Israel se sentía cada vez más feliz, sintiendo que cada cosa que aprendía era una nueva aventura.",
+   "texto_en": "Later, it was time for numbers. Israel counted on his little fingers and got excited when he reached ten. The teacher taught them to add with toys, and that made them laugh a lot. At the end of class, they all learned to write the letters of the alphabet. Israel felt happier and happier, as if everything he learned were a new adventure."
+  },
+  {
+   "tipo": "pagina",
+   "pista": "19",
+   "img": "images/19.jpg",
+   "alt": "Israel le enseña los colores a Adrián con una manzana y una naranja",
+   "alt_en": "Israel teaches Adrián the colors with an apple and an orange",
+   "texto": "Cuando llegó a casa, Israel no podía esperar para compartir lo que había aprendido. —¡Adrián, ven rápido! —gritó a su hermanito. Juntos se sentaron en la alfombra, e Israel comenzó a enseñarle los colores. —Mira, esta manzana es roja y esta naranja es amarilla. Adrián sonreía. Israel continuaba: —Ese dado que tienes en la mano es azul.",
+   "texto_en": "When he got home, Israel couldn't wait to share what he had learned. \"Adrián, come quick!\" he called to his little brother. They sat down together on the rug, and Israel began teaching him the colors. \"Look, this apple is red and this orange is yellow.\" Adrián smiled. Israel went on: \"That cube in your hand is blue.\""
+  },
+  {
+   "tipo": "pagina",
+   "pista": "20",
+   "img": "images/20.jpg",
+   "alt": "Israel acompaña a Adrián, que duerme abrazado al osito",
+   "alt_en": "Israel lies next to Adrián, who sleeps hugging the teddy bear",
+   "texto": "Cuando anocheció, Israel y Adrián se fueron a la cama. Como Adrián aún era muy pequeñito, Israel se acostó a su lado para que no tuviera miedo, mientras Adrián abrazaba el osito de peluche que le regaló Israel cuando era pequeñito.",
+   "texto_en": "When night came, Israel and Adrián went to bed. Since Adrián was still very little, Israel lay down next to him so he wouldn't be scared, while Adrián hugged the teddy bear Israel had given him when he was a baby."
+  },
+  {
+   "tipo": "capitulo",
+   "id": "cap-5",
+   "titulo": "La aventura de Israel y Génesis",
+   "titulo_en": "Israel and Génesis's Adventure",
+   "pista": "cap5",
+   "img": "images/cap5.jpg",
+   "alt": "Israel lleva de la mano a Génesis y a Adrián en un parque junto al lago",
+   "alt_en": "Israel holds hands with Génesis and Adrián in a park by the lake"
+  },
+  {
+   "tipo": "pagina",
+   "pista": "21",
+   "img": "images/21.jpg",
+   "alt": "Israel y Adrián esperan a Génesis junto a la ventana",
+   "alt_en": "Israel and Adrián wait for Génesis by the window",
+   "texto": "Israel estaba muy emocionado porque su prima Génesis venía de México. Era la primera vez que la iba a conocer. Desde que su mamá le contó que iba a visitarles, no podía dejar de pensar en lo divertido que sería jugar juntos. Israel sabía que Génesis era de la misma edad que su hermanito Adrián, y eso lo llenaba de alegría. ¡Tres niños juntos siempre es mejor que uno!",
+   "texto_en": "Israel was very excited because his cousin Génesis was coming from Mexico. It was the first time he would meet her. Ever since his mom told him she was coming to visit, he couldn't stop thinking about how much fun it would be to play together. Israel knew that Génesis was the same age as his little brother Adrián, and that made him very happy. Three kids together are always better than one!"
+  },
+  {
+   "tipo": "pagina",
+   "pista": "22",
+   "img": "images/22.jpg",
+   "alt": "Génesis llega y abraza a Israel frente al garaje",
+   "alt_en": "Génesis arrives and hugs Israel in front of the garage",
+   "texto": "Cuando Génesis llegó, llevaba una sonrisa tan grande que iluminó toda la casa. Israel la miró y pensó que era igualita a la foto que había visto antes. Tenía el cabello rizado y unos ojos brillantes que reflejaban la aventura. —¡Hola, prima! —le dijo Israel, corriendo hacia ella. Génesis le respondió con un abrazo cálido y, en ese momento, Israel supo que se harían grandes amigos.",
+   "texto_en": "When Génesis arrived, she had a smile so big it lit up the whole house. Israel looked at her and thought she looked just like the photo he had seen before. She had curly hair and bright eyes full of adventure. \"Hi, cousin!\" Israel said, running toward her. Génesis answered with a warm hug, and right then, Israel knew they would become great friends."
+  },
+  {
+   "tipo": "pagina",
+   "pista": "23",
+   "img": "images/23.jpg",
+   "alt": "Los tres niños hacen una carrera de sacos en Navy Pier",
+   "alt_en": "The three children have a sack race at Navy Pier",
+   "texto": "A la mañana siguiente, que era sábado, los tres niños salieron con sus mamás a visitar el Navy Pier de Chicago. Allí disfrutaron corriendo entre los chorros de agua que salían del piso, montaron en la rueda y también en un gran tobogán y una cama elástica. Mientras corrían y reían, Génesis les mostró a Israel y a Adrián un juego que había traído de México: «La carrera de sacos». Aunque al principio se caían y reían, pronto se convirtieron en unos expertos en saltar.",
+   "texto_en": "The next morning, which was Saturday, the three children went with their moms to visit Navy Pier in Chicago. There they had fun running through the water jets that sprang up from the ground, and they rode the Ferris wheel and also a big slide and a trampoline. While they ran and laughed, Génesis showed Israel and Adrián a game she had brought from Mexico: the sack race. Even though they kept falling down and laughing at first, they soon became expert jumpers."
+  },
+  {
+   "tipo": "pagina",
+   "pista": "24",
+   "img": "images/24.jpg",
+   "alt": "Génesis cuenta historias de México: una piñata, un alebrije y un pueblo",
+   "alt_en": "Génesis tells stories about Mexico: a piñata, an alebrije and a town",
+   "texto": "A medida que pasaba el día, empezaron a hablar sobre México y sus pueblos mágicos. Génesis les contó sobre las piñatas y la deliciosa comida que había en su país. Israel y Adrián estaban tan asombrados que no dejaban de hacer preguntas, sobre todo cuando Génesis les contó sobre los alebrijes, que son como los ángeles guardianes, pero mexicanos. Cada historia hacía que el corazón de Israel y Adrián se llenara de ganas de conocer México.",
+   "texto_en": "As the day went on, they began talking about Mexico and its magical towns. Génesis told them about piñatas and the delicious food of her country. Israel and Adrián were so amazed that they kept asking questions, especially when Génesis told them about alebrijes, which are like guardian angels, but Mexican. Every story filled Israel's and Adrián's hearts with the wish to visit Mexico."
+  },
+  {
+   "tipo": "pagina",
+   "pista": "25",
+   "img": "images/25.jpg",
+   "alt": "Israel, Génesis y Adrián, sentados en la hierba bajo las estrellas",
+   "alt_en": "Israel, Génesis and Adrián sit on the grass under the stars",
+   "texto": "Al caer la tarde, Israel, Génesis y Adrián se sentaron en la hierba, cansados pero felices. Miraban hacia el cielo, que se llenaba de estrellas. Israel se dio cuenta de que sentía un cariño muy especial por su prima. —Espero que podamos jugar juntos muchas veces más —dijo. Génesis sonrió y le respondió: —¡Así será! ¡Esto es solo el comienzo de nuestras aventuras! Y así, los tres amigos soñaron con la próxima gran fiesta que tendrían cuando los tres estuvieran en México.",
+   "texto_en": "As evening fell, Israel, Génesis and Adrián sat on the grass, tired but happy. They looked up at the sky, which was filling with stars. Israel realized that he felt a very special love for his cousin. \"I hope we can play together many more times,\" he said. Génesis smiled and answered, \"We will! This is only the beginning of our adventures!\" And so, the three friends dreamed about the next big party they would have when all three of them were together in Mexico."
+  },
+  {
+   "tipo": "capitulo",
+   "id": "cap-6",
+   "titulo": "La gran graduación de Israel",
+   "titulo_en": "Israel's Big Graduation",
+   "pista": "cap6",
+   "img": "images/cap6.jpg",
+   "alt": "Israel con toga y birrete blancos, su diploma y confeti",
+   "alt_en": "Israel in a white cap and gown, with his diploma and confetti"
+  },
+  {
+   "tipo": "pagina",
+   "pista": "26",
+   "img": "images/26.jpg",
+   "alt": "Israel ayuda a una compañera con un rompecabezas; sus maestras sonríen",
+   "alt_en": "Israel helps a classmate with a puzzle; his teachers smile",
+   "texto": "Israel estaba a punto de graduarse del jardín de infantes. Era un niño muy estudioso e inteligente. Cada día, Israel se esforzaba por aprender cosas nuevas y disfrutar de sus juegos con sus amigos. Sus maestras, Miss Quintero y Miss Hernández, lo querían mucho porque siempre hacía preguntas interesantes y ayudaba a sus compañeros cuando tenían dudas.",
+   "texto_en": "Israel was about to graduate from kindergarten. He was a very hardworking and smart boy. Every day, Israel did his best to learn new things and enjoyed playing with his friends. His teachers, Miss Quintero and Miss Hernández, loved him very much because he always asked interesting questions and helped his classmates when they had doubts."
+  },
+  {
+   "tipo": "pagina",
+   "pista": "27",
+   "img": "images/27.jpg",
+   "alt": "Israel, con toga, en el escenario; Miss Quintero lo tranquiliza",
+   "alt_en": "Israel, in his gown, on the stage; Miss Quintero reassures him",
+   "texto": "El día de la graduación, la escuela se llenó de risas y colores. Todos los niños estaban vestidos con trajes bonitos y sus mejores sonrisas. En el teatro de la escuela, las familias esperaban emocionadas. Por fin, comenzaron la ceremonia y los padres aplaudían con orgullo. Israel estaba un poco nervioso, pero Miss Quintero le dio una sonrisa que lo tranquilizó.",
+   "texto_en": "On graduation day, the school was filled with laughter and color. All the children were dressed in their nicest clothes and wearing their best smiles. In the school theater, the families waited excitedly. At last, the ceremony began, and the parents clapped proudly. Israel was a little nervous, but Miss Quintero gave him a smile that calmed him down."
+  },
+  {
+   "tipo": "pagina",
+   "pista": "28",
+   "img": "images/28.jpg",
+   "alt": "La familia espera en el teatro; Adrián está en las piernas de Papá",
+   "alt_en": "The family waits in the theater; Adrián sits on Dad's lap",
+   "texto": "Entre los asistentes estaban su hermanito Adrián, que lo miraba con admiración, su papá José Armando y su mamá Rosalía; todos sonreían con felicidad. También estaban su abuelo Armando y su bisabuelo Zhema, quienes siempre le contaban historias de cuando ellos eran pequeños. Todos esperaban con ansias el momento de ver a Israel recibir su diploma.",
+   "texto_en": "Among the guests were his little brother Adrián, who looked at him with admiration, his dad José Armando and his mom Rosalía; they were all smiling happily. His grandpa Armando and his great-grandpa Zhema were there too, the ones who always told him stories about when they were little. Everyone was eagerly waiting to see Israel receive his diploma."
+  },
+  {
+   "tipo": "pagina",
+   "pista": "29",
+   "img": "images/29.jpg",
+   "alt": "Israel da una vueltita con su diploma y sus maestras aplauden",
+   "alt_en": "Israel does a little spin with his diploma as his teachers clap",
+   "texto": "Cuando llegó su turno, Israel subió al escenario con paso firme. Miss Quintero y Miss Hernández le entregaron su diploma con una gran sonrisa. Israel se sintió muy feliz y dio una pequeña vuelta para mostrar su felicidad. Todos en la sala aplaudieron y vitorearon su nombre. ¡Era un momento especial que nunca olvidaría!",
+   "texto_en": "When it was his turn, Israel walked onto the stage with confident steps. Miss Quintero and Miss Hernández handed him his diploma with a big smile. Israel felt very happy and did a little spin to show his joy. Everyone in the room clapped and cheered his name. It was a special moment he would never forget!"
+  },
+  {
+   "tipo": "pagina",
+   "pista": "30",
+   "img": "images/30.jpg",
+   "alt": "Toda la familia celebra a Israel con globos y pastel",
+   "alt_en": "The whole family celebrates Israel with balloons and cake",
+   "texto": "Después de la ceremonia, todos lo abrazaron con alegría. La familia organizó una fiesta con globos y pastel de colores. Israel se sintió rodeado de amor y apoyo. ¡Era un día muy feliz para él! Y mientras disfrutaba de la fiesta, supo que siempre seguiría aprendiendo y creciendo, porque la aventura apenas comenzaba.",
+   "texto_en": "After the ceremony, everyone hugged him happily. The family threw a party with balloons and a colorful cake. Israel felt surrounded by love and support. It was a very happy day for him! And as he enjoyed the party, he knew he would always keep learning and growing, because the adventure was only beginning."
+  },
+  {
+   "tipo": "video",
+   "id": "final",
+   "src": "video/final.mp4",
+   "poster": "images/998.png",
+   "etiqueta": "Despedida de Cucu"
+  },
+  {
+   "tipo": "fin",
+   "pista": "fin"
+  }
+ ]
 };
+/* NARRACIÓN. En "es"/"en": false = sin audio; true = todas las páginas;
+   o una lista de pistas ya grabadas (["cap1","1","2",...]) mientras se completa.
+   Archivos: audio/es-1.mp3, audio/es-cap1.mp3, audio/en-1.mp3, audio/en-cap1.mp3, audio/es-fin.mp3, audio/en-fin.mp3
+   Carta: "carta": {"es": true/false, "en": true/false} → audio/es-carta.mp3, audio/en-carta.mp3 */
 
 /* =========================================================
    MOTOR DEL LIBRO (no hace falta tocarlo)
@@ -375,6 +762,18 @@ const LIBRO = {
   const hojas = LIBRO.hojas;
   let actual = 0;
   let leerSolo = false;
+  let idioma = "es"; // cada visita empieza en español
+  const EN = () => idioma === "en";
+  const tx = (es, en) => EN() ? en : es;
+  const campo = (h, c) => EN() ? h[c + "_en"] : h[c];
+  function audioDe(h){
+    const n = LIBRO.narracion;
+    if(h.tipo === "carta") return (n.carta && n.carta[idioma]) ? `audio/${idioma}-carta.mp3` : "";
+    const pistas = n[idioma];
+    if(!h.pista || !pistas) return "";
+    if(Array.isArray(pistas) && !pistas.includes(h.pista)) return "";
+    return `audio/${idioma}-${h.pista}.mp3`;
+  }
 
   // Preferencias del lector (si el navegador no las guarda, no pasa nada)
   try{
@@ -390,13 +789,13 @@ const LIBRO = {
   // conVozDeCucu: solo la carta, que está narrada con la voz de Zhema
   function botonEscuchar(audio, conVozDeCucu){
     if(!audio) return "";
-    const etiqueta = conVozDeCucu ? "Escuchar a Cucu" : "Escuchar el cuento";
+    const etiqueta = conVozDeCucu ? tx("Escuchar a Cucu","Listen to Cucu") : tx("Escuchar el cuento","Listen to the story");
     const icono = conVozDeCucu ? `<img src="${esc(LIBRO.avatar)}" alt="">` : `<span class="bocina" aria-hidden="true">🔊</span>`;
     return `<button class="escuchar" type="button" data-audio="${esc(audio)}" data-etiqueta="${etiqueta}" aria-pressed="false">
       ${icono} <span class="rotulo">${etiqueta}</span></button>`;
   }
   function lamina(img, alt, contener){
-    return `<div class="lado lamina${contener?" contener":""}" data-grande="${esc(img)}" role="button" tabindex="0" aria-label="Ver la lámina en grande">
+    return `<div class="lado lamina${contener?" contener":""}" data-grande="${esc(img)}" role="button" tabindex="0" aria-label="${tx("Ver la lámina en grande","See the picture large")}: ${esc(alt||"")}">
       <img src="${esc(img)}" alt="${esc(alt||"Ilustración del cuento")}"></div>`;
   }
 
@@ -404,56 +803,56 @@ const LIBRO = {
     switch(h.tipo){
       case "portada":
         return `<div class="hoja sola portada">
-          ${lamina(h.img, h.alt)}
+          ${lamina(h.img, campo(h,"alt"))}
           <div class="lado portada-izq">
             <img class="cucu" src="${esc(LIBRO.avatar)}" alt="">
-            <h2 class="gran">${esc(LIBRO.titulo)}</h2>
-            <p class="sub">Un cuento de Cucu</p>
-            <button class="abrir" type="button" data-ir="1">Abrir el libro ›</button>
+            <h2 class="gran">${esc(campo(LIBRO,"titulo"))}</h2>
+            <p class="sub">${tx("Un cuento de Cucu","A story by Cucu")}</p>
+            <button class="abrir" type="button" data-ir="1">${tx("Abrir el libro ›","Open the book ›")}</button>
           </div></div>`;
       case "portadilla":
         return `<div class="hoja">
           <div class="lado portadilla">
-            <p class="gran">${esc(LIBRO.titulo)}</p>
-            <p class="autor">Escrito con cariño por<br><strong>${esc(LIBRO.autor)}</strong></p>
+            <p class="gran">${esc(campo(LIBRO,"titulo"))}</p>
+            <p class="autor">${tx("Escrito con cariño por","Written with love by")}<br><strong>${esc(LIBRO.autor)}</strong></p>
           </div>
           <div class="lado portadilla">
-            <p>Toca <strong>Escuchar el cuento</strong> en cada página para oírlo en voz alta.</p>
-            <p>Pasa las páginas con las flechas, con el teclado o deslizando el dedo.</p>
-            <p class="licencia">Esta obra está bajo una licencia Creative Commons 4.0 Internacional: Reconocimiento – No Comercial – Compartir Igual.</p>
+            ${LIBRO.narracion[idioma] ? tx("<p>Toca <strong>Escuchar el cuento</strong> en cada página para oírlo en voz alta.</p>","<p>Tap <strong>Listen to the story</strong> on each page to hear it read aloud.</p>") : ""}
+            <p>${tx("Pasa las páginas con las flechas, con el teclado o deslizando el dedo.","Turn the pages with the arrows, the keyboard or by swiping.")}</p>
+            <p class="licencia">${tx("Esta obra está bajo una licencia Creative Commons 4.0 Internacional: Reconocimiento – No Comercial – Compartir Igual.","This work is licensed under Creative Commons 4.0 International: Attribution – NonCommercial – ShareAlike.")}</p>
           </div></div>`;
       case "indice": {
-        const items = capitulos.map((c,n)=>`<li><a href="#${c.h.id}">${esc(c.h.titulo)}</a></li>`).join("");
+        const items = capitulos.map((c,n)=>`<li><a href="#${c.h.id}">${esc(campo(c.h,"titulo"))}</a></li>`).join("");
         const fin = hojas.findIndex(x=>x.id==="final");
-        return `<div class="hoja"><nav class="lado indice" id="indice-nav" aria-label="Índice">
-          <h2>Viajando por el libro</h2>
-          <ol><li class="ex"><a class="extra" href="#carta">Mi pequeño Israel</a></li>${items}
-          ${fin>=0?`<li class="ex"><a class="extra" href="#final">El final con video</a></li>`:""}</ol></nav>
-          ${h.img ? lamina(h.img, h.alt) : ""}</div>`;
+        return `<div class="hoja"><nav class="lado indice" id="indice-nav" aria-label="${tx("Índice","Contents")}">
+          <h2>${tx("Viajando por el libro","Inside the book")}</h2>
+          <ol><li class="ex"><a class="extra" href="#carta">${esc(campo(hojas.find(x=>x.tipo==="carta"),"titulo"))}</a></li>${items}
+          ${fin>=0?`<li class="ex"><a class="extra" href="#final">${tx("El final con video","The ending, with a video")}</a></li>`:""}</ol></nav>
+          ${h.img ? lamina(h.img, campo(h,"alt")) : ""}</div>`;
       }
       case "carta":
         return `<div class="hoja">
-          ${lamina(h.img, "Cucu, el bisabuelo de Israel", true)}
-          <div class="lado carta"><h2>${esc(h.titulo)}</h2>
-          ${h.parrafos.map(p=>`<p>${esc(p)}</p>`).join("")}
-          <p class="firma">${esc(h.firma)}</p>${botonEscuchar(h.audio, true)}</div></div>`;
+          ${lamina(h.img, campo(h,"alt"), true)}
+          <div class="lado carta"><h2>${esc(campo(h,"titulo"))}</h2>
+          ${campo(h,"parrafos").map(p=>`<p>${esc(p)}</p>`).join("")}
+          <p class="firma">${esc(campo(h,"firma"))}</p>${botonEscuchar(audioDe(h), true)}</div></div>`;
       case "video":
         return `<div class="hoja sola"><div class="lado video-hoja">
           <video controls preload="none" playsinline poster="${esc(h.poster)}" aria-label="${esc(h.etiqueta)}">
-            <source src="${esc(h.src)}" type="video/mp4">Tu navegador no puede mostrar este video.</video></div></div>`;
+            <source src="${esc(h.src)}" type="video/mp4">${tx("Tu navegador no puede mostrar este video.","Your browser cannot show this video.")}</video></div></div>`;
       case "capitulo": {
         const n = capitulos.findIndex(c=>c.i===i)+1;
-        return `<div class="hoja">${lamina(h.img, "Ilustración del capítulo " + n)}
-          <div class="lado cuento"><span class="num-cap">Capítulo ${n}</span>
-          <h2 class="titulo-cap">${esc(h.titulo)}</h2>${botonEscuchar(h.audio)}</div></div>`;
+        return `<div class="hoja">${lamina(h.img, campo(h,"alt"))}
+          <div class="lado cuento"><span class="num-cap">${tx("Capítulo","Chapter")} ${n}</span>
+          <h2 class="titulo-cap">${esc(campo(h,"titulo"))}</h2>${botonEscuchar(audioDe(h))}</div></div>`;
       }
       case "pagina":
-        return `<div class="hoja">${lamina(h.img)}
-          <div class="lado cuento"><p>${esc(h.texto)}</p>${botonEscuchar(h.audio)}</div></div>`;
+        return `<div class="hoja">${lamina(h.img, campo(h,"alt"))}
+          <div class="lado cuento"><p>${esc(campo(h,"texto"))}</p>${botonEscuchar(audioDe(h))}</div></div>`;
       case "fin":
         return `<div class="hoja sola"><div class="lado" style="text-align:center">
-          <p class="fin">Fin</p>${botonEscuchar(h.audio)}
-          <p><a href="#indice">Volver al índice</a> · <a href="../">Ver otros cuentos de Cucu</a></p></div></div>`;
+          <p class="colorin">${tx("Colorín colorado,<br>este cuento se&nbsp;ha&nbsp;acabado.","And they all lived<br>happily ever after.")}</p>${botonEscuchar(audioDe(h))}
+          <p><a href="#indice">${tx("Volver al índice","Back to contents")}</a> · <a href="../">${tx("Ver otros cuentos de Cucu","See more stories by Cucu")}</a></p></div></div>`;
     }
     return "";
   }
@@ -488,7 +887,7 @@ const LIBRO = {
     const ancla = h.id || (h.tipo==="indice" ? "indice" : h.tipo==="carta" ? "carta" : "pagina-"+(n+1));
     if(location.hash !== "#"+ancla) history.replaceState(null, "", "#"+ancla);
     ajustarLetra(hoja);
-    if(leerSolo && h.audio) tocar(hoja.querySelector(".escuchar"));
+    if(leerSolo && audioDe(h)) tocar(hoja.querySelector(".escuchar"));
   }
 
   const dosPaginas = matchMedia("(min-width:821px) and (orientation:landscape)");
@@ -537,7 +936,7 @@ const LIBRO = {
     voz.src = src;
     voz.play().then(()=>{
       btn.setAttribute("aria-pressed","true");
-      btn.querySelector(".rotulo").textContent = "Pausar";
+      btn.querySelector(".rotulo").textContent = tx("Pausar","Pause");
     }).catch(()=>{});
   }
   voz.addEventListener("ended", pararVoz);
@@ -607,7 +1006,28 @@ const LIBRO = {
   function cerrarVisor(){ $("#visor").classList.remove("abierto"); if(volverA) volverA.focus(); }
   $("#visor").onclick = cerrarVisor;
 
-  document.title = LIBRO.titulo;
+  // Idioma: el libro siempre abre en español
+  function rotular(){
+    document.documentElement.lang = idioma;
+    document.title = campo(LIBRO,"titulo");
+    $("#nombre-libro").textContent = campo(LIBRO,"titulo");
+    const bI = $("#btn-idioma");
+    bI.textContent = EN() ? "Español" : "English";
+    bI.lang = EN() ? "es" : "en";
+    bI.setAttribute("aria-label", EN() ? "Leer el cuento en español" : "Read the story in English");
+    const t = (sel, txt, aria) => { const el=$(sel); el.querySelector(".txt").textContent=txt; el.setAttribute("aria-label",aria); };
+    t("#lnk-bib", tx("Biblioteca","Library"), tx("Volver a la biblioteca de cuentos","Back to the story library"));
+    t("#lnk-ind", tx("Índice","Contents"), tx("Ir al índice","Go to the contents"));
+    t("#btn-auto", tx("Léemelo","Read to me"), tx("Léemelo: cada página se lee en voz alta al pasarla","Read to me: each page is read aloud when you turn it"));
+    t("#btn-letra", tx("Letra","Text"), tx("Letra más grande","Larger text"));
+    $("#ant").setAttribute("aria-label",tx("Página anterior","Previous page")); $("#ant2").setAttribute("aria-label",tx("Página anterior","Previous page"));
+    $("#sig").setAttribute("aria-label",tx("Página siguiente","Next page")); $("#sig2").setAttribute("aria-label",tx("Página siguiente","Next page"));
+    $("#avance").setAttribute("aria-label",tx("Avance en el libro","Progress through the book"));
+    $("#visor-cerrar").setAttribute("aria-label",tx("Cerrar la lámina","Close the picture"));
+  }
+  $("#btn-idioma").onclick = () => { idioma = EN() ? "es" : "en"; rotular(); ir(actual); };
+  if(!LIBRO.narracion.es && !LIBRO.narracion.en) $("#btn-auto").style.display = "none";
+  rotular();
   ir(desdeAncla());
 })();
 </script>
