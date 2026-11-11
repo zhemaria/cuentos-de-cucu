@@ -738,9 +738,11 @@ const LIBRO = {
   {
    "tipo": "video",
    "id": "final",
-   "src": "video/final.mp4",
-   "poster": "images/998.png",
-   "etiqueta": "Despedida de Cucu"
+   "src": "video/despedida-es.mp4",
+   "src_en": "video/despedida-en.mp4",
+   "poster": "images/cap6.jpg",
+   "etiqueta": "Despedida de Cucu",
+   "etiqueta_en": "Goodbye from Cucu"
   },
   {
    "tipo": "fin",
@@ -838,8 +840,8 @@ const LIBRO = {
           <p class="firma">${esc(campo(h,"firma"))}</p>${botonEscuchar(audioDe(h), true)}</div></div>`;
       case "video":
         return `<div class="hoja sola"><div class="lado video-hoja">
-          <video controls preload="none" playsinline poster="${esc(h.poster)}" aria-label="${esc(h.etiqueta)}">
-            <source src="${esc(h.src)}" type="video/mp4">${tx("Tu navegador no puede mostrar este video.","Your browser cannot show this video.")}</video></div></div>`;
+          <video controls preload="none" playsinline poster="${esc(h.poster)}" aria-label="${esc(campo(h,"etiqueta")||h.etiqueta)}">
+            <source src="${esc(campo(h,"src")||h.src)}" type="video/mp4">${tx("Tu navegador no puede mostrar este video.","Your browser cannot show this video.")}</video></div></div>`;
       case "capitulo": {
         const n = capitulos.findIndex(c=>c.i===i)+1;
         return `<div class="hoja">${lamina(h.img, campo(h,"alt"))}
