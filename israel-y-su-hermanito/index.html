@@ -740,6 +740,8 @@ const LIBRO = {
    "id": "final",
    "src": "video/despedida-es.mp4",
    "src_en": "video/despedida-en.mp4",
+   "subtitulos": "video/despedida-es.vtt",
+   "subtitulos_en": "video/despedida-en.vtt",
    "poster": "images/cap6.jpg",
    "etiqueta": "Despedida de Cucu",
    "etiqueta_en": "Goodbye from Cucu"
@@ -841,7 +843,7 @@ const LIBRO = {
       case "video":
         return `<div class="hoja sola"><div class="lado video-hoja">
           <video controls preload="none" playsinline poster="${esc(h.poster)}" aria-label="${esc(campo(h,"etiqueta")||h.etiqueta)}">
-            <source src="${esc(campo(h,"src")||h.src)}" type="video/mp4">${tx("Tu navegador no puede mostrar este video.","Your browser cannot show this video.")}</video></div></div>`;
+            <source src="${esc(campo(h,"src")||h.src)}" type="video/mp4">${h.subtitulos?`<track kind="captions" src="${esc(campo(h,"subtitulos"))}" srclang="${idioma}" label="${tx("Español","English")}">`:""}${tx("Tu navegador no puede mostrar este video.","Your browser cannot show this video.")}</video></div></div>`;
       case "capitulo": {
         const n = capitulos.findIndex(c=>c.i===i)+1;
         return `<div class="hoja">${lamina(h.img, campo(h,"alt"))}
