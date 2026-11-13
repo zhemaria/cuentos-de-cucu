@@ -1408,7 +1408,7 @@ const LIBRO = {
     rueda(box){
       box.innerHTML = `<div class="wg-rueda"><p class="wg-tit">🎵 ${tx("La canción","The song")}</p>
         ${EN()?`<p class="wg-nota">The song is sung in Spanish, just like Génesis and her friends sing it.</p>`:""}
-        <p class="wg-letra" lang="es">A la rueda, rueda<br>de San Miguel, San Miguel,<br>todos traen su caja<br>de miel.<br>A lo maduro, a lo maduro,<br>¡que se voltee Adrián<br>de burro!</p>
+        <p class="wg-letra" lang="es"><strong>Dulce de limoncito</strong><br>A la ronda, ronda<br>del caballito, caballito,<br>todos traen su dulce<br>de limoncito.<br>A lo bonito, a lo bonito,<br>¡que se voltee Adrián,<br>despacito!</p><p class="wg-nota">${tx("Inspirada en la ronda tradicional «A la rueda de San Miguel». Cántenla con el nombre de cada niño.","Inspired by the traditional ring song “A la rueda de San Miguel”. Sing it with each child's name.")}</p>
         <button type="button" class="wg-play wg-cancion"><span aria-hidden="true">🔊</span> ${tx("Escuchar la canción","Listen to the song")}</button>
         <p class="wg-msg" role="status" aria-live="polite"></p></div>`;
       const msg = box.querySelector(".wg-msg"), b = box.querySelector(".wg-cancion");
