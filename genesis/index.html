@@ -148,6 +148,28 @@ main{flex:1;display:flex;align-items:center;justify-content:center;padding:.5rem
 .lado.carta{justify-content:safe center;padding:1.6rem 2.2rem}
 .carta .escuchar{margin-top:.2rem}
 .lado.cuento{justify-content:safe center}
+
+.practica.larga ol,.practica.larga p{font-size:calc(var(--letra)*.7)}
+.lado.wg{background:#fdf7ec;align-items:center;justify-content:center;padding:1.2rem}
+.wg-tit{font-family:"Fredoka",sans-serif;font-size:1.3em;color:var(--titulo);margin:0 0 .6rem;text-align:center}
+.wg-msg{min-height:2.6em;text-align:center;font-weight:700;color:#1d6b35;margin:.6rem 0 0}
+.wg-rejilla{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;background:#b5652b;border-radius:18px;padding:.8rem;border:4px solid #7d4a1e}
+.wg-cosa{font:inherit;font-size:.85rem;background:#fff;border:3px solid #fff;border-radius:12px;padding:.4rem .2rem;min-height:84px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:.2rem;color:#222}
+.wg-cosa span{font-size:2rem;line-height:1}
+.wg-cosa.bien{border-color:#2b9d4a;background:#e3f6e8}
+.wg-cosa.bien::after{content:"✓";color:#2b9d4a;font-weight:700}
+.wg-cosa.no{animation:wgno .4s}
+@keyframes wgno{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.wg-mapa{width:100%;display:flex;flex-direction:column;gap:.5rem}
+.wg-mapa-zona{width:100%;height:clamp(220px,48vh,420px);border-radius:12px;border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.wg-botones{display:flex;flex-wrap:wrap;gap:.35rem;justify-content:center}
+.wg-botones button,.wg-play{font:inherit;font-size:.9rem;font-weight:700;background:#0b6fa4;color:#fff;border:0;border-radius:999px;padding:.35rem .8rem;min-height:44px;cursor:pointer}
+.wg-rueda{text-align:center}
+.wg-letra{font-size:1.1em;line-height:1.6;background:#fff;border-radius:14px;padding:.8rem 1.2rem;margin:.4rem 0 .8rem}
+.wg-nota{font-size:.9em;color:#555;margin:0}
+.wg-juego{width:100%;display:flex;flex-direction:column;align-items:center;gap:.6rem}
+.wg-juego svg{width:100%;max-width:420px;height:auto;border-radius:14px;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.wg-juego text,.wg-juego g,.wg-juego line{transition:transform .25s}
 .lado.practica{overflow-y:auto;justify-content:flex-start}
 .practica .titulo-cap{font-size:1.6em}
 .practica ol{font-size:calc(var(--letra)*.78);line-height:1.4;margin:.4rem 0 0;padding-left:1.4em}
@@ -514,7 +536,8 @@ const LIBRO = {
     "a toothbrush",
     "your favorite toy",
     "a gift for someone you love"
-   ]
+   ],
+   "interactivo": "maleta"
   },
   {
    "tipo": "capitulo",
@@ -584,7 +607,8 @@ const LIBRO = {
     "the state of Oaxaca",
     "Vicente Camalote, near Veracruz",
     "Color the path and mark where you live."
-   ]
+   ],
+   "interactivo": "mapa"
   },
   {
    "tipo": "capitulo",
@@ -640,22 +664,22 @@ const LIBRO = {
    "titulo": "Los tacos de vaca de Guita",
    "titulo_en": "Guita's Steamed Beef Tacos",
    "lista": [
-    "Siempre con un adulto: él usa la estufa y la vaporera. Necesitas carne de res, cebolla, ajo, laurel, sal, manteca y tortillas de maíz:",
-    "El adulto cuece la carne con cebolla, ajo, laurel y sal hasta que esté muy suave.",
-    "Tú ayudas a deshebrar la carne con un tenedor, cuando ya esté tibia.",
-    "Pasa cada tortilla por un poquito de caldo para que no se rompa.",
-    "Rellena la tortilla con carne y dóblala por la mitad.",
-    "El adulto acomoda los tacos en círculo en la vaporera y los cuece al vapor de 20 a 30 minutos.",
-    "¡A comer con cilantro, cebolla, salsa y limón!"
+    "Siempre con un adulto, que usa la estufa y la vaporera:",
+    "🥩 El adulto cuece la carne con cebolla, ajo, laurel y sal hasta que esté muy suave.",
+    "🍴 Tú ayudas a deshebrar la carne con un tenedor, cuando ya esté tibia.",
+    "🫓 Pasa cada tortilla por un poquito de caldo para que no se rompa.",
+    "🌮 Rellena la tortilla con carne y dóblala por la mitad.",
+    "♨️ El adulto acomoda los tacos en círculo en la vaporera y los cuece al vapor de 20 a 30 minutos.",
+    "😋 ¡A comer con cilantro, cebolla, salsa y limón!"
    ],
    "lista_en": [
-    "Always with a grown-up, who uses the stove and the steamer. You need beef, onion, garlic, bay leaves, salt, lard and corn tortillas:",
-    "The grown-up cooks the beef with onion, garlic, bay leaves and salt until it is very soft.",
-    "You help shred the beef with a fork once it is warm, not hot.",
-    "Dip each tortilla in a little broth so it does not break.",
-    "Fill the tortilla with beef and fold it in half.",
-    "The grown-up places the tacos in a circle in the steamer and steams them for 20 to 30 minutes.",
-    "Enjoy them with cilantro, onion, salsa and lime!"
+    "Always with a grown-up, who uses the stove and the steamer:",
+    "🥩 The grown-up cooks the beef with onion, garlic, bay leaves and salt until it is very soft.",
+    "🍴 You help shred the beef with a fork once it is warm, not hot.",
+    "🫓 Dip each tortilla in a little broth so it does not break.",
+    "🌮 Fill the tortilla with beef and fold it in half.",
+    "♨️ The grown-up places the tacos in a circle in the steamer and steams them for 20 to 30 minutes.",
+    "😋 Enjoy them with cilantro, onion, salsa and lime!"
    ]
   },
   {
@@ -724,7 +748,8 @@ const LIBRO = {
     "At the end, the song says a child's name.",
     "That child turns around, still holding hands.",
     "Keep going until everyone is facing out. Then start again!"
-   ]
+   ],
+   "interactivo": "rueda"
   },
   {
    "tipo": "capitulo",
@@ -792,7 +817,8 @@ const LIBRO = {
     "Pick up one jack while the ball bounces once.",
     "Catch the ball with the same hand.",
     "When you have picked them all up one at a time, try two at a time, then three…"
-   ]
+   ],
+   "interactivo": "matatena"
   },
   {
    "tipo": "capitulo",
@@ -860,7 +886,8 @@ const LIBRO = {
     "Take turns flicking your marble with your thumb from outside the circle.",
     "If you knock a marble out of the circle, you keep it!",
     "Whoever has the most marbles at the end wins. (Never put marbles in your mouth.)"
-   ]
+   ],
+   "interactivo": "canicas"
   },
   {
    "tipo": "capitulo",
@@ -916,18 +943,18 @@ const LIBRO = {
    "titulo": "Reglas para ir al arroyo",
    "titulo_en": "Creek Safety Rules",
    "lista": [
-    "Ve siempre con un adulto, y que te vea todo el tiempo.",
-    "Quédate en la orilla, donde el agua está bajita.",
-    "Si el arroyo está crecido, o el agua corre rápido o está turbia, no se entra.",
-    "Usa zapatos de agua o camina despacio: las piedras resbalan.",
-    "Si llueve fuerte o truena, ¡fuera del agua!"
+    "👀 Ve siempre con un adulto, y que te vea todo el tiempo.",
+    "🦶 Quédate en la orilla, donde el agua está bajita.",
+    "🌊 Si el arroyo está crecido, o el agua corre rápido o está turbia, no se entra.",
+    "🩴 Usa zapatos de agua o camina despacio: las piedras resbalan.",
+    "⛈️ Si llueve fuerte o truena, ¡fuera del agua!"
    ],
    "lista_en": [
-    "Always go with a grown-up who can see you all the time.",
-    "Stay at the edge, where the water is shallow.",
-    "If the creek is high, fast or muddy, nobody goes in.",
-    "Wear water shoes or walk slowly: rocks are slippery.",
-    "If it rains hard or thunders, get out of the water!"
+    "👀 Always go with a grown-up who can see you all the time.",
+    "🦶 Stay at the edge, where the water is shallow.",
+    "🌊 If the creek is high, fast or muddy, nobody goes in.",
+    "🩴 Wear water shoes or walk slowly: rocks are slippery.",
+    "⛈️ If it rains hard or thunders, get out of the water!"
    ]
   },
   {
@@ -1052,18 +1079,18 @@ const LIBRO = {
    "titulo": "Reglas en la playa y en la lancha",
    "titulo_en": "Beach and Boat Safety",
    "lista": [
-    "En la lancha, siempre con chaleco salvavidas.",
-    "Métete al mar solo con un adulto a tu lado.",
-    "Ponte protector solar y una gorra.",
-    "Toma mucha agua: hace calor.",
-    "Si ves una bandera roja, no se entra al mar."
+    "🦺 En la lancha, siempre con chaleco salvavidas.",
+    "👨‍👧 Métete al mar solo con un adulto a tu lado.",
+    "🧴 Ponte protector solar y una gorra.",
+    "💧 Toma mucha agua: hace calor.",
+    "🚩 Si ves una bandera roja, no se entra al mar."
    ],
    "lista_en": [
-    "On a boat, always wear a life jacket.",
-    "Go in the sea only with a grown-up next to you.",
-    "Wear sunscreen and a cap.",
-    "Drink lots of water: it is hot.",
-    "If you see a red flag, nobody goes in the water."
+    "🦺 On a boat, always wear a life jacket.",
+    "👨‍👧 Go in the sea only with a grown-up next to you.",
+    "🧴 Wear sunscreen and a cap.",
+    "💧 Drink lots of water: it is hot.",
+    "🚩 If you see a red flag, nobody goes in the water."
    ]
   },
   {
@@ -1132,7 +1159,8 @@ const LIBRO = {
     "Spin them around three times and hand them the stick.",
     "Everyone sings while they swing; everyone else stays far from the stick.",
     "When it breaks, pick up the candy! And share it with everyone."
-   ]
+   ],
+   "interactivo": "pinata"
   },
   {
    "tipo": "capitulo",
@@ -1288,8 +1316,8 @@ const LIBRO = {
         return `<div class="hoja">${lamina(h.img, campo(h,"alt"))}
           <div class="lado cuento"><p>${esc(campo(h,"texto"))}</p>${botonEscuchar(audioDe(h))}</div></div>`;
       case "practica":
-        return `<div class="hoja">${lamina(h.img, campo(h,"alt"))}
-          <div class="lado cuento practica"><span class="num-cap">${tx("¡Ahora tú!","Your turn!")}</span>
+        return `<div class="hoja">${h.interactivo ? `<div class="lado wg"></div>` : lamina(h.img, campo(h,"alt"))}
+          <div class="lado cuento practica${campo(h,"lista").length>6?" larga":""}"><span class="num-cap">${tx("¡Ahora tú!","Your turn!")}</span>
           <h2 class="titulo-cap">${esc(campo(h,"titulo"))}</h2>
           ${(()=>{const l=campo(h,"lista"); const intro=/:$/.test(l[0])?l[0]:""; const it=intro?l.slice(1):l;
             return (intro?`<p>${esc(intro)}</p>`:"")+`<ol>${it.map(x=>`<li>${esc(x)}</li>`).join("")}</ol>`;})()}</div></div>`;
@@ -1299,6 +1327,193 @@ const LIBRO = {
           <p><a href="#indice">${tx("Volver al índice","Back to contents")}</a> · <a href="../">${tx("Ver otros cuentos de Cucu","See more stories by Cucu")}</a></p></div></div>`;
     }
     return "";
+  }
+
+
+  /* ===== Páginas «¡Ahora tú!» interactivas ===== */
+  let ctxAudio = null, limpiar = [];
+  function tono(f, d, cuando, tipo){
+    try{
+      ctxAudio = ctxAudio || new (window.AudioContext||window.webkitAudioContext)();
+      const t = ctxAudio.currentTime + (cuando||0), o = ctxAudio.createOscillator(), g = ctxAudio.createGain();
+      o.type = tipo||"triangle"; o.frequency.value = f;
+      g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(0.25,t+0.02); g.gain.exponentialRampToValueAtTime(0.0001,t+d);
+      o.connect(g); g.connect(ctxAudio.destination); o.start(t); o.stop(t+d+0.05);
+    }catch(e){}
+  }
+  const alegre = ()=>{ tono(523,.18,0); tono(659,.18,.12); tono(784,.3,.24); };
+  const fiesta = ()=>{ [523,659,784,1047,784,1047].forEach((f,i)=>tono(f,.22,i*.13)); };
+  const oops = ()=>{ tono(260,.2,0,"sine"); tono(200,.3,.15,"sine"); };
+  const pop = ()=>tono(880,.08,0,"square");
+  function decir(el, t){ el.textContent = ""; setTimeout(()=>el.textContent = t, 30); }
+  function cada(fn, ms){ const id = setInterval(fn, ms); limpiar.push(()=>clearInterval(id)); return id; }
+  function luego(fn, ms){ const id = setTimeout(fn, ms); limpiar.push(()=>clearTimeout(id)); return id; }
+  const quieto = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const WIDGETS = {
+    maleta(box){
+      const cosas = [["👕","Ropa fresca","Cool clothes",1],["🧥","Abrigo de invierno","Winter coat",0],["🧢","Gorra","Cap",1],
+        ["🧴","Protector solar","Sunscreen",1],["⛸️","Patines de hielo","Ice skates",0],["🪥","Cepillo de dientes","Toothbrush",1],
+        ["🧤","Guantes de nieve","Snow gloves",0],["🦖","Tu juguete favorito","Your favorite toy",1],["🎁","Un regalo","A gift",1]];
+      const total = cosas.filter(c=>c[3]).length; let van = 0;
+      box.innerHTML = `<div class="wg-maleta"><p class="wg-tit">🧳 ${tx("Toca lo que va en la maleta","Tap what goes in the suitcase")}</p>
+        <div class="wg-rejilla">${cosas.map((c,i)=>`<button type="button" class="wg-cosa" data-i="${i}"><span aria-hidden="true">${c[0]}</span>${esc(tx(c[1],c[2]))}</button>`).join("")}</div>
+        <p class="wg-msg" role="status" aria-live="polite"></p></div>`;
+      const msg = box.querySelector(".wg-msg");
+      box.querySelectorAll(".wg-cosa").forEach(b=>b.onclick=()=>{
+        const c = cosas[b.dataset.i];
+        if(b.classList.contains("bien")) return;
+        if(c[3]){ b.classList.add("bien"); b.setAttribute("aria-pressed","true"); van++;
+          if(van===total){ fiesta(); decir(msg, tx("¡Maleta lista! ¡Nos vamos a México! 🎉","Suitcase ready! Off to Mexico! 🎉")); }
+          else { alegre(); decir(msg, tx(`¡Sí! Llevas ${van} de ${total}.`,`Yes! You have ${van} of ${total}.`)); } }
+        else { oops(); b.classList.remove("no"); void b.offsetWidth; b.classList.add("no");
+          decir(msg, tx("¡Uy! En Vicente Camalote hace calor: eso no hace falta.","Oops! It is hot in Vicente Camalote: you won't need that.")); }
+      });
+    },
+
+    mapa(box){
+      box.innerHTML = `<div class="wg-mapa"><div class="wg-mapa-zona" id="wg-mapa-zona" aria-label="${tx("Mapa del viaje","Map of the trip")}"></div>
+        <div class="wg-botones">
+          <button type="button" data-p="chi">🏙️ Chicago</button><button type="button" data-p="mex">🇲🇽 ${tx("México","Mexico")}</button>
+          <button type="button" data-p="oax">🌿 Oaxaca</button><button type="button" data-p="vic">⭐ Vicente Camalote</button>
+          <button type="button" data-p="ver">🌊 Veracruz</button><button type="button" data-p="todo">✈️ ${tx("Todo el viaje","The whole trip")}</button></div>
+        <p class="wg-msg" role="status" aria-live="polite"></p></div>`;
+      const msg = box.querySelector(".wg-msg");
+      const P = {chi:[[41.88,-87.63],9], mex:[[23.6,-102.5],4], oax:[[17.6,-96.6],7], vic:[[18.512,-96.53],13], ver:[[19.18,-96.13],11]};
+      const notas = {chi:["Aquí viven Israel y Adrián.","Israel and Adrián live here."], mex:["¡México es muy grande!","Mexico is very big!"],
+        oax:["Oaxaca es el estado de Génesis.","Oaxaca is Génesis's state."], vic:["Aquí vive Génesis. ¡Busca el ingenio!","Génesis lives here. Look for the sugar mill!"],
+        ver:["Aquí está el mar y el fuerte de San Juan de Ulúa.","Here is the sea and the fort of San Juan de Ulúa."], todo:["De Chicago a Vicente Camalote: ¡más de 3,000 km!","From Chicago to Vicente Camalote: more than 1,900 miles!"]};
+      function arrancar(){
+        if(!document.getElementById("wg-mapa-zona")) return;
+        const m = L.map("wg-mapa-zona",{scrollWheelZoom:false});
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:17,attribution:"© OpenStreetMap"}).addTo(m);
+        const ruta = [[41.88,-87.63],[18.512,-96.53]];
+        L.polyline(ruta,{color:"#e8792b",weight:4,dashArray:"8 8"}).addTo(m);
+        L.marker([41.88,-87.63]).addTo(m).bindTooltip("🏙️ Chicago");
+        L.marker([18.512,-96.53]).addTo(m).bindTooltip("⭐ Vicente Camalote");
+        L.marker([19.18,-96.13]).addTo(m).bindTooltip("🌊 Veracruz");
+        const todo = ()=>m.fitBounds(ruta,{padding:[30,30]}); todo();
+        box.querySelectorAll(".wg-botones button").forEach(b=>b.onclick=()=>{
+          const k=b.dataset.p; pop(); if(k==="todo") todo(); else m.flyTo(P[k][0],P[k][1],{duration:quieto()?0:1.2});
+          decir(msg, tx(notas[k][0],notas[k][1])); });
+        limpiar.push(()=>m.remove());
+      }
+      if(window.L) return arrancar();
+      const css = document.createElement("link"); css.rel="stylesheet"; css.href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"; document.head.appendChild(css);
+      const s = document.createElement("script"); s.src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"; s.onload=arrancar;
+      s.onerror=()=>{ msg.textContent = tx("El mapa necesita internet.","The map needs an internet connection."); };
+      document.head.appendChild(s);
+    },
+
+    rueda(box){
+      box.innerHTML = `<div class="wg-rueda"><p class="wg-tit">🎵 ${tx("La canción","The song")}</p>
+        ${EN()?`<p class="wg-nota">The song is sung in Spanish, just like Génesis and her friends sing it.</p>`:""}
+        <p class="wg-letra" lang="es">A la rueda, rueda<br>de San Miguel, San Miguel,<br>todos traen su caja<br>de miel.<br>A lo maduro, a lo maduro,<br>¡que se voltee Adrián<br>de burro!</p>
+        <button type="button" class="wg-play wg-cancion"><span aria-hidden="true">🔊</span> ${tx("Escuchar la canción","Listen to the song")}</button>
+        <p class="wg-msg" role="status" aria-live="polite"></p></div>`;
+      const msg = box.querySelector(".wg-msg"), b = box.querySelector(".wg-cancion");
+      const a = new Audio("audio/rueda.mp3"); limpiar.push(()=>a.pause());
+      a.onerror = ()=>{ b.disabled = true; msg.textContent = tx("La canción llegará pronto.","The song is coming soon."); };
+      b.onclick = ()=>{ if(a.paused){ a.currentTime=0; a.play().catch(()=>{}); } else a.pause(); };
+    },
+
+    matatena(box){
+      box.innerHTML = `<div class="wg-juego"><svg viewBox="0 0 300 260" role="img" aria-label="${tx("Animación de la matatena","Jacks animation")}">
+        <rect x="0" y="200" width="300" height="60" fill="#d9cdb8"/>
+        <g class="estrellas"></g>
+        <text class="mano" x="150" y="222" font-size="34" text-anchor="middle">✋</text>
+        <circle class="pelota" cx="150" cy="180" r="11" fill="#d93a2b" stroke="#fff" stroke-width="2"/>
+        <text class="cuenta" x="290" y="30" font-size="18" text-anchor="end" fill="#0b6fa4" font-weight="700"></text>
+        <text class="nivel" x="10" y="30" font-size="16" fill="#555"></text></svg>
+        <button type="button" class="wg-play">▶ ${tx("Ver cómo se juega","See how to play")}</button>
+        <p class="wg-msg" role="status" aria-live="polite"></p></div>`;
+      const svg = box.querySelector("svg"), g = svg.querySelector(".estrellas"), bola = svg.querySelector(".pelota"),
+            mano = svg.querySelector(".mano"), cuenta = svg.querySelector(".cuenta"), nivel = svg.querySelector(".nivel"), msg = box.querySelector(".wg-msg");
+      const pos = [[60,230],[100,242],[140,226],[185,240],[225,228],[255,244]];
+      let quedan, grupo, timer;
+      function poner(){ g.innerHTML = pos.map((p,i)=>`<text data-i="${i}" x="${p[0]}" y="${p[1]}" font-size="22" text-anchor="middle" fill="#6b7b8c">✶</text>`).join(""); quedan=[0,1,2,3,4,5]; }
+      function mover(el, x, y){ el.setAttribute("x",x); el.setAttribute("y",y); }
+      function ronda(){
+        if(!quedan.length){ if(grupo===1){ grupo=2; poner(); } else { fiesta(); decir(msg, tx("¡Ganaste! Ahora de 3 en 3…","You win! Now three at a time…")); bola.style.transform=""; return; } }
+        nivel.textContent = tx(`De ${grupo} en ${grupo}`,`${grupo} at a time`);
+        const toma = quedan.splice(0,grupo);
+        bola.style.transition = quieto()?"none":"transform .5s ease-out"; bola.style.transform="translateY(-140px)"; tono(660,.1,0);
+        luego(()=>{ const p = pos[toma[0]]; mover(mano,p[0],p[1]+4);
+          toma.forEach(i=>{ const s=g.querySelector(`[data-i="${i}"]`); if(s) s.style.opacity=0; }); pop(); }, 450);
+        luego(()=>{ mover(mano,150,222); bola.style.transition = quieto()?"none":"transform .45s ease-in"; bola.style.transform="translateY(30px)"; }, 900);
+        luego(()=>{ bola.style.transition = quieto()?"none":"transform .25s ease-out"; bola.style.transform="translateY(0)"; }, 1360);
+        luego(()=>{ tono(330,.08,0); cuenta.textContent = tx(`Recogidas: ${6-quedan.length}`,`Picked up: ${6-quedan.length}`);
+          decir(msg, tx(`Tira la pelotita, recoge ${grupo===1?"una estrellita":"dos estrellitas"} y atrápala después de un bote.`,`Toss the ball, pick up ${grupo===1?"one jack":"two jacks"} and catch it after one bounce.`)); }, 1400);
+        luego(ronda, 2400);
+      }
+      box.querySelector(".wg-play").onclick = ()=>{ limpiar.forEach(f=>f()); limpiar=[]; grupo=1; poner(); cuenta.textContent=""; ronda(); };
+      poner();
+    },
+
+    canicas(box){
+      box.innerHTML = `<div class="wg-juego"><svg viewBox="0 0 300 260" role="img" aria-label="${tx("Juego de canicas","Marbles game")}">
+        <rect width="300" height="260" fill="#cfd4d6"/>
+        <circle cx="150" cy="110" r="85" fill="none" stroke="#fff" stroke-width="4" stroke-dasharray="6 4"/>
+        <g class="dentro"></g><circle class="tiro" cx="150" cy="235" r="11" fill="#1f5fbf" stroke="#fff" stroke-width="2"/>
+        <text class="cuenta" x="12" y="252" font-size="16" text-anchor="start" fill="#0b6fa4" font-weight="700"></text></svg>
+        <button type="button" class="wg-play">👍 ${tx("¡Tira la canica!","Flick the marble!")}</button>
+        <p class="wg-msg" role="status" aria-live="polite"></p></div>`;
+      const g = box.querySelector(".dentro"), tiro = box.querySelector(".tiro"), cuenta = box.querySelector(".cuenta"), msg = box.querySelector(".wg-msg"), btn = box.querySelector(".wg-play");
+      const colores = ["#d93a2b","#2b9d4a","#e8b62b","#8a3fd1","#e8792b"];
+      const pos = [[120,90],[175,80],[150,125],[110,140],[190,135]];
+      let ganadas = 0, ocupado = false;
+      function poner(){ g.innerHTML = pos.map((p,i)=>`<circle data-i="${i}" cx="${p[0]}" cy="${p[1]}" r="10" fill="${colores[i]}" stroke="#fff" stroke-width="1.5"/>`).join(""); ganadas=0; cuenta.textContent=""; }
+      const anim = (el, x, y, ms) => { el.style.transition = quieto()?"none":`cx ${ms}ms ease-out, cy ${ms}ms ease-out`; el.setAttribute("cx",x); el.setAttribute("cy",y); };
+      btn.onclick = ()=>{
+        if(ocupado) return; const resto = [...g.querySelectorAll("circle:not(.fuera)")];
+        if(!resto.length){ poner(); return; }
+        ocupado = true; const m = resto[Math.floor(Math.random()*resto.length)];
+        const mx=+m.getAttribute("cx"), my=+m.getAttribute("cy"); pop();
+        anim(tiro, mx, my+18, 450);
+        luego(()=>{ tono(1200,.06,0,"square"); const dx=mx-150, dy=my-110, L=Math.hypot(dx,dy)||1;
+          m.classList.add("fuera"); anim(m, Math.max(15,Math.min(285,150+dx/L*125)), Math.max(15,Math.min(200,110+dy/L*125)), 600); }, 460);
+        luego(()=>{ ganadas++; alegre(); cuenta.textContent = tx(`Ganadas: ${ganadas}`,`Won: ${ganadas}`); anim(tiro,150,235,500);
+          decir(msg, ganadas===5 ? tx("¡Las ganaste todas! Toca otra vez para jugar de nuevo.","You won them all! Tap again to play again.") : tx("¡Clic! La sacaste del círculo: es tuya.","Click! You knocked it out of the circle: it's yours."));
+          if(ganadas===5) fiesta(); ocupado=false; }, 1150);
+      };
+      poner();
+    },
+
+    pinata(box){
+      box.innerHTML = `<div class="wg-juego"><svg viewBox="0 0 300 260" role="img" aria-label="${tx("Cómo se rompe la piñata","How to break the piñata")}">
+        <rect width="300" height="260" fill="#f6efe2"/><line x1="0" y1="18" x2="300" y2="18" stroke="#8b5a2b" stroke-width="3"/>
+        <g class="colgada"><line x1="150" y1="18" x2="150" y2="60" stroke="#8b5a2b" stroke-width="2"/><text class="pinata" x="150" y="105" font-size="52" text-anchor="middle">🪅</text></g>
+        <g class="dulces"></g>
+        <g class="nino" transform="translate(150 215)"><text x="0" y="0" font-size="44" text-anchor="middle" class="cara">🧒</text>
+          <line class="palo" x1="18" y1="-10" x2="44" y2="-46" stroke="#8b5a2b" stroke-width="5" stroke-linecap="round"/></g>
+        <text class="paso" x="150" y="252" font-size="14" text-anchor="middle" fill="#0b6fa4" font-weight="700"></text></svg>
+        <button type="button" class="wg-play">▶ ${tx("Ver cómo se juega","See how to play")}</button>
+        <p class="wg-msg" role="status" aria-live="polite"></p></div>`;
+      const s = box.querySelector("svg"), nino = s.querySelector(".nino"), cara = s.querySelector(".cara"), palo = s.querySelector(".palo"),
+            colgada = s.querySelector(".colgada"), dulces = s.querySelector(".dulces"), paso = s.querySelector(".paso"), msg = box.querySelector(".wg-msg");
+      const pasos = [
+        ["1. Hagan una fila","1. Line up","Los más pequeños van primero.","The youngest go first."],
+        ["2. La venda en los ojos","2. Cover the eyes","Le tapan los ojos con una pañoleta.","A scarf covers the eyes."],
+        ["3. Tres vueltas","3. Three spins","¡Una, dos y tres!","One, two, three!"],
+        ["4. ¡Dale, dale, dale!","4. Hit it!","Todos cantan y se quedan lejos del palo.","Everyone sings and stays far from the stick."],
+        ["5. ¡Llueven dulces!","5. Candy rains down!","¡A recoger dulces y a compartir!","Pick up the candy and share it!"]];
+      function reset(){ cara.textContent="🧒"; nino.setAttribute("transform","translate(150 215)"); palo.style.transform=""; colgada.style.transform=""; dulces.innerHTML=""; paso.textContent=""; s.querySelector(".pinata").textContent="🪅"; }
+      function mostrar(i){ paso.textContent = tx(pasos[i][0],pasos[i][1]); decir(msg, tx(pasos[i][2],pasos[i][3])); }
+      box.querySelector(".wg-play").onclick = ()=>{
+        limpiar.forEach(f=>f()); limpiar=[]; reset(); mostrar(0); pop();
+        luego(()=>{ mostrar(1); cara.textContent="🙈"; pop(); }, 1600);
+        luego(()=>{ mostrar(2); let k=0; const v=cada(()=>{ k++; nino.setAttribute("transform",`translate(150 215) scale(${k%2?-1:1} 1)`); tono(500+k*60,.08,0); if(k>=6){ clearInterval(v); nino.setAttribute("transform","translate(150 215)"); } }, 250); }, 3200);
+        luego(()=>{ mostrar(3); let k=0; const v=cada(()=>{ k++; palo.style.transformOrigin="18px -10px"; palo.style.transform = k%2?"rotate(-35deg)":"rotate(0deg)";
+          colgada.style.transformOrigin="150px 18px"; colgada.style.transform = `rotate(${k%2?6:-6}deg)`; tono(300,.06,0,"square"); if(k>=7) clearInterval(v); }, 300); }, 5000);
+        luego(()=>{ mostrar(4); s.querySelector(".pinata").textContent="💥"; fiesta();
+          const tipos=["🍬","🍭","🍫","🍬","🍭"]; dulces.innerHTML = Array.from({length:14},(_,i)=>`<text x="${70+i*12}" y="100" font-size="16">${tipos[i%5]}</text>`).join("");
+          [...dulces.children].forEach((d,i)=>{ d.style.transition = quieto()?"none":`transform ${0.8+Math.random()*0.7}s ease-in`; luego(()=>d.style.transform=`translate(${(Math.random()-.5)*60}px, ${110+Math.random()*30}px)`, 30); }); }, 7500);
+      };
+    }
+  };
+  function activarWidget(h, hoja){
+    limpiar.forEach(f=>f()); limpiar=[];
+    const box = hoja && hoja.querySelector(".wg"); if(box && WIDGETS[h.interactivo]) WIDGETS[h.interactivo](box);
   }
 
   function pararVoz(){
@@ -1315,6 +1530,7 @@ const LIBRO = {
     actual = n;
     libro.innerHTML = pintar(hojas[n], n);
     const hoja = libro.firstElementChild;
+    activarWidget(hojas[n], hoja);
     const ladosNuevos = hoja.classList.contains("sola") ? [] : [...hoja.children].filter(c=>c.classList.contains("lado"));
     if(sentido){
       if(ladosViejos.length===2 && ladosNuevos.length===2 && dosPaginas.matches && !sinMovimiento.matches)
