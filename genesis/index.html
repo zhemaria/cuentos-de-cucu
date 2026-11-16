@@ -1261,6 +1261,27 @@ const LIBRO = {
     return `<button class="escuchar" type="button" data-audio="${esc(audio)}" data-etiqueta="${etiqueta}" aria-pressed="false">
       ${icono} <span class="rotulo">${etiqueta}</span></button>`;
   }
+  /* Botón «Escuchar» para las páginas sin grabación (portadilla y «¡Ahora tú!»):
+     las lee la voz del navegador, en el idioma del libro. */
+  const hayVozNavegador = "speechSynthesis" in window && "SpeechSynthesisUtterance" in window;
+  function botonLeer(texto, etiquetaEs, etiquetaEn){
+    if(!hayVozNavegador || !texto) return "";
+    const etiqueta = tx(etiquetaEs || "Escuchar", etiquetaEn || "Listen");
+    return `<button class="escuchar" type="button" data-tts="${esc(texto)}" data-etiqueta="${etiqueta}" aria-pressed="false">
+      <span class="bocina" aria-hidden="true">🔊</span> <span class="rotulo">${etiqueta}</span></button>`;
+  }
+  const conPunto = t => String(t).trim() + (/[.!?…:¡¿]$/.test(String(t).trim()) ? " " : ". ");
+  function vozDelNavegador(){
+    const voces = speechSynthesis.getVoices(), lang = idioma === "en" ? "en" : "es";
+    const delIdioma = voces.filter(v => v.lang && v.lang.toLowerCase().startsWith(lang));
+    const buena = /natural|neural|online|google|premium|enhanced|siri/i;
+    const region = lang === "es" ? /es[-_](mx|us|419)/i : /en[-_]us/i;
+    return delIdioma.find(v => buena.test(v.name) && region.test(v.lang)) ||
+           delIdioma.find(v => buena.test(v.name)) ||
+           delIdioma.find(v => region.test(v.lang)) || delIdioma[0] || null;
+  }
+  if(hayVozNavegador){ speechSynthesis.getVoices(); speechSynthesis.onvoiceschanged = () => speechSynthesis.getVoices(); }
+
   function lamina(img, alt, contener){
     return `<div class="lado lamina${contener?" contener":""}" data-grande="${esc(img)}" role="button" tabindex="0" aria-label="${tx("Ver la lámina en grande","See the picture large")}: ${esc(alt||"")}">
       <img src="${esc(img)}" alt="${esc(alt||"Ilustración del cuento")}"></div>`;
@@ -1286,6 +1307,8 @@ const LIBRO = {
           <div class="lado portadilla">
             ${LIBRO.narracion[idioma] ? tx("<p>Toca <strong>Escuchar el cuento</strong> en cada página para oírlo en voz alta.</p>","<p>Tap <strong>Listen to the story</strong> on each page to hear it read aloud.</p>") : ""}
             <p>${tx("Pasa las páginas con las flechas, con el teclado o deslizando el dedo.","Turn the pages with the arrows, the keyboard or by swiping.")}</p>
+            ${botonLeer(conPunto(campo(LIBRO,"titulo")) + tx("Escrito con cariño por ","Written with love by ") + conPunto(String(LIBRO.autor).replace(/\s*\(Cucu\)/,", Cucu")) +
+              tx("Pasa las páginas con las flechas, con el teclado o deslizando el dedo.","Turn the pages with the arrows, the keyboard or by swiping."))}
             <p class="licencia">${tx("Esta obra está bajo una licencia Creative Commons 4.0 Internacional: Reconocimiento – No Comercial – Compartir Igual.","This work is licensed under Creative Commons 4.0 International: Attribution – NonCommercial – ShareAlike.")}</p>
           </div></div>`;
       case "indice": {
@@ -1321,7 +1344,11 @@ const LIBRO = {
           <div class="lado cuento practica${campo(h,"lista").length>6?" larga":""}"><span class="num-cap">${tx("¡Ahora tú!","Your turn!")}</span>
           <h2 class="titulo-cap">${esc(campo(h,"titulo"))}</h2>
           ${(()=>{const l=campo(h,"lista"); const intro=/:$/.test(l[0])?l[0]:""; const it=intro?l.slice(1):l;
-            return (intro?`<p>${esc(intro)}</p>`:"")+`<ol>${it.map(x=>`<li>${esc(x)}</li>`).join("")}</ol>`;})()}</div></div>`;
+            return (intro?`<p>${esc(intro)}</p>`:"")+`<ol>${it.map(x=>`<li>${esc(x)}</li>`).join("")}</ol>`;})()}
+          ${(()=>{const l=campo(h,"lista"); const intro=/:$/.test(l[0])?l[0]:""; const it=intro?l.slice(1):l;
+            return botonLeer(tx("¡Ahora tú! ","Your turn! ") + conPunto(campo(h,"titulo")) + (intro?intro+" ":"") +
+              it.map((x,k)=>(k+1)+". "+x.replace(/[.!?…]*$/,"")).join(". ") + ".",
+              "Escuchar las instrucciones","Listen to the instructions");})()}</div></div>`;
       case "fin":
         return `<div class="hoja sola"><div class="lado" style="text-align:center">
           <p class="colorin">${tx("Colorín colorado,<br>este cuento se&nbsp;ha&nbsp;acabado.","And they all lived<br>happily ever after.")}</p>${botonEscuchar(audioDe(h))}
@@ -1519,6 +1546,7 @@ const LIBRO = {
 
   function pararVoz(){
     voz.pause();
+    if(hayVozNavegador) speechSynthesis.cancel();
     document.querySelectorAll(".escuchar").forEach(b=>{b.setAttribute("aria-pressed","false");b.querySelector(".rotulo").textContent=b.dataset.etiqueta;});
   }
 
@@ -1548,7 +1576,7 @@ const LIBRO = {
     const ancla = h.id || (h.tipo==="indice" ? "indice" : h.tipo==="carta" ? "carta" : "pagina-"+(n+1));
     if(location.hash !== "#"+ancla) history.replaceState(null, "", "#"+ancla);
     ajustarLetra(hoja);
-    if(leerSolo && audioDe(h)) tocar(hoja.querySelector(".escuchar"));
+    if(leerSolo && (audioDe(h) || hoja.querySelector(".escuchar[data-tts]"))) tocar(hoja.querySelector(".escuchar"));
   }
 
   const dosPaginas = matchMedia("(min-width:821px) and (orientation:landscape)");
@@ -1594,6 +1622,17 @@ const LIBRO = {
     const src = btn.dataset.audio;
     if(btn.getAttribute("aria-pressed")==="true"){ pararVoz(); return; }
     pararVoz();
+    if(btn.dataset.tts){
+      const u = new SpeechSynthesisUtterance(btn.dataset.tts);
+      u.lang = idioma === "en" ? "en-US" : "es-MX";
+      const v = vozDelNavegador(); if(v) u.voice = v;
+      u.rate = 0.92;
+      u.onend = () => { if(btn.getAttribute("aria-pressed")==="true") pararVoz(); };
+      btn.setAttribute("aria-pressed","true");
+      btn.querySelector(".rotulo").textContent = tx("Parar","Stop");
+      speechSynthesis.speak(u);
+      return;
+    }
     voz.src = src;
     voz.play().then(()=>{
       btn.setAttribute("aria-pressed","true");
