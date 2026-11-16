@@ -1228,7 +1228,8 @@ const LIBRO = {
   const hojas = LIBRO.hojas;
   let actual = 0;
   let leerSolo = false;
-  let idioma = "es"; // cada visita empieza en español
+  /* cada visita empieza en español, salvo que el enlace pida inglés (?lang=en), como hace la página Stories de Lumi */
+  let idioma = new URLSearchParams(location.search).get("lang") === "en" ? "en" : "es";
   const EN = () => idioma === "en";
   const tx = (es, en) => EN() ? en : es;
   const campo = (h, c) => EN() ? h[c + "_en"] : h[c];
@@ -1685,7 +1686,11 @@ const LIBRO = {
     $("#avance").setAttribute("aria-label",tx("Avance en el libro","Progress through the book"));
     $("#visor-cerrar").setAttribute("aria-label",tx("Cerrar la lámina","Close the picture"));
   }
-  $("#btn-idioma").onclick = () => { idioma = EN() ? "es" : "en"; rotular(); ir(actual); };
+  $("#btn-idioma").onclick = () => {
+    idioma = EN() ? "es" : "en";
+    try{ const u = new URL(location.href); u.searchParams.set("lang", idioma); history.replaceState(null, "", u); }catch(e){}
+    rotular(); ir(actual);
+  };
   if(!LIBRO.narracion.es && !LIBRO.narracion.en) $("#btn-auto").style.display = "none";
   rotular();
   ir(desdeAncla());
