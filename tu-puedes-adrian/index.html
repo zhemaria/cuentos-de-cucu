@@ -157,6 +157,13 @@ main{flex:1;display:flex;align-items:center;justify-content:center;padding:.5rem
 .lado.video-hoja{padding:0;background:#111;display:flex;align-items:center;justify-content:center}
 .video-hoja video{width:100%;height:100%;object-fit:contain;background:#000}
 
+/* resaltado de lo que se está leyendo en voz alta (DUA: seguir el texto con la vista) */
+.frase,.palabra{border-radius:.25em;-webkit-box-decoration-break:clone;box-decoration-break:clone;transition:background-color .2s,box-shadow .2s}
+.frase.leyendo{background:#fff3b0;box-shadow:0 0 0 .14em #fff3b0}
+.palabra.leyendo{background:#ffd54f;box-shadow:0 0 0 .1em #ffd54f}
+@media (prefers-reduced-motion: reduce){.frase,.palabra{transition:none}}
+@media (forced-colors: active){.frase.leyendo,.palabra.leyendo{background:Highlight;color:HighlightText;box-shadow:none}}
+
 /* botón de narración */
 .escuchar{
   align-self:center;margin-top:.6rem;display:inline-flex;align-items:center;gap:.6rem;
@@ -923,7 +930,141 @@ const LIBRO = {
     return "";
   }
 
+  /* =========================================================
+     RESALTADO DE LECTURA
+     Mientras suena la narración se marca la frase que se está leyendo.
+     · Grabación (mp3): la frase se calcula por su largo dentro de la pista.
+     · Voz del navegador: se lee frase por frase y, si el navegador lo
+       permite, se marca además palabra por palabra.
+     ========================================================= */
+  let lecturaId = 0, rafId = 0;
+  const NO_PARTIR = /(?:^|\s)(?:[A-ZÁÉÍÓÚÑ]|Sr|Sra|Dr|Dra|St|Mr|Mrs|Ms|Jr)\.$/;
+  function partirFrases(t){
+    const trozos = t.match(/[^.!?…]+(?:[.!?…]+["»”')]*\s*|$)/g) || [t];
+    const out = [];
+    trozos.forEach(tr => {
+      if(!tr) return;
+      // no se parte tras «Sr.», «M.»… ni cuando sigue en minúscula («—¿Qué es? —preguntó Israel»)
+      if(out.length && (NO_PARTIR.test(out[out.length-1].trim()) || !/\S/.test(tr) || /^\s*[—–-]?\s*[a-záéíóúñü]/.test(tr))) out[out.length-1] += tr;
+      else out.push(tr);
+    });
+    return out;
+  }
+  // Envuelve el texto de un bloque en <span class="frase"> (sin tocar <br>, <strong>, etc.)
+  function envolverFrases(el){
+    const nodos = [], w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+    while(w.nextNode()) if(w.currentNode.nodeValue.trim()) nodos.push(w.currentNode);
+    nodos.forEach(n => {
+      const frag = document.createDocumentFragment();
+      partirFrases(n.nodeValue).forEach(f => {
+        const ini = f.match(/^\s*/)[0], fin = f.match(/\s*$/)[0], cuerpo = f.trim();
+        if(ini) frag.appendChild(document.createTextNode(ini));
+        if(cuerpo){ const s = document.createElement("span"); s.className = "frase"; s.textContent = cuerpo; frag.appendChild(s); }
+        if(fin && cuerpo) frag.appendChild(document.createTextNode(fin));
+      });
+      n.parentNode.replaceChild(frag, n);
+    });
+  }
+  // Bloques de texto que acompañan a un botón «Escuchar»
+  function bloquesDe(btn){
+    const lado = btn.closest(".lado"); if(!lado) return [];
+    const zona = lado.classList.contains("portadilla") ? lado.closest(".hoja") : lado;
+    return [...zona.querySelectorAll(".num-cap, h2, p, li")].filter(el =>
+      !el.closest(".escuchar") && !el.closest(".wg") && !el.classList.contains("licencia") &&
+      !el.querySelector("a, button, input") && el.textContent.trim() &&
+      !(el.tagName === "P" && el.querySelector("li")));
+  }
+  function frasesDe(btn){
+    const bloques = bloquesDe(btn), frases = [];
+    bloques.forEach(b => {
+      if(!b.querySelector(".frase")) envolverFrases(b);
+      b.querySelectorAll(".frase").forEach((f, k) => frases.push({el:f, bloque:b, primera:k===0}));
+    });
+    return frases;
+  }
+  function marcar(el, clase){
+    const zona = el.closest(".hoja") || document;
+    zona.querySelectorAll("." + clase + ".leyendo").forEach(x => x.classList.remove("leyendo"));
+    el.classList.add("leyendo");
+    const lado = el.closest(".lado");
+    if(lado && lado.scrollHeight > lado.clientHeight + 4){
+      const r = el.getBoundingClientRect(), l = lado.getBoundingClientRect();
+      if(r.top < l.top || r.bottom > l.bottom)
+        el.scrollIntoView({block:"center", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"});
+    }
+  }
+  function quitarResaltado(){
+    lecturaId++;
+    cancelAnimationFrame(rafId);
+    document.querySelectorAll(".frase.leyendo, .palabra.leyendo").forEach(x => x.classList.remove("leyendo"));
+  }
+
+  // Grabación: reparte la duración de la pista según el largo de cada frase
+  function seguirGrabacion(btn){
+    const frases = frasesDe(btn); if(!frases.length) return;
+    const PAUSA = 14;                                   // una pausa entre frases "vale" unos 14 caracteres
+    const pesos = frases.map(f => f.el.textContent.length + PAUSA);
+    const total = pesos.reduce((a,b)=>a+b, 0);
+    const limites = []; pesos.reduce((acc,p)=>{ limites.push((acc+p)/total); return acc+p; }, 0);
+    const id = lecturaId; let ultima = -1;
+    (function paso(){
+      if(id !== lecturaId) return;
+      if(voz.duration && isFinite(voz.duration)){
+        const avance = Math.min(.999, voz.currentTime / voz.duration);
+        const k = limites.findIndex(l => avance < l);
+        if(k !== ultima && k >= 0){ ultima = k; marcar(frases[k].el, "frase"); }
+      }
+      rafId = requestAnimationFrame(paso);
+    })();
+  }
+
+  // Voz del navegador: una frase tras otra; palabra por palabra si hay eventos de límite
+  function leerConVozDelNavegador(btn, alTerminar){
+    const frases = frasesDe(btn);
+    if(!frases.length) return false;
+    const id = lecturaId, lang = idioma === "en" ? "en-US" : "es-MX", v = vozDelNavegador();
+    let numLi = 0;
+    const cola = frases.map(f => {
+      let prefijo = "";
+      if(f.primera && f.bloque.tagName === "LI"){ numLi++; prefijo = numLi + ". "; }
+      const texto = f.el.textContent.replace(/\s*\(Cucu\)/, ", Cucu");
+      return {f, prefijo, texto};
+    });
+    let k = 0;
+    function siguiente(){
+      if(id !== lecturaId) return;
+      if(k >= cola.length){ alTerminar(); return; }
+      const {f, prefijo, texto} = cola[k++];
+      marcar(f.el, "frase");
+      // palabras de esta frase (se preparan al momento)
+      if(!f.el.querySelector(".palabra")){
+        const t = f.el.textContent; f.el.textContent = "";
+        t.split(/(\s+)/).forEach(p => {
+          if(!p) return;
+          if(/^\s+$/.test(p)) f.el.appendChild(document.createTextNode(p));
+          else { const s = document.createElement("span"); s.className = "palabra"; s.textContent = p; f.el.appendChild(s); }
+        });
+      }
+      const palabras = [...f.el.querySelectorAll(".palabra")];
+      const inicios = []; let pos = 0;
+      palabras.forEach(p => { pos = texto.indexOf(p.textContent.replace("(Cucu)", "Cucu"), pos); inicios.push(pos < 0 ? Infinity : pos); if(pos >= 0) pos += 1; });
+      const u = new SpeechSynthesisUtterance(prefijo + texto);
+      u.lang = lang; if(v) u.voice = v; u.rate = 0.92;
+      u.onboundary = e => {
+        if(id !== lecturaId || e.name === "sentence") return;
+        const c = e.charIndex - prefijo.length; if(c < 0) return;
+        let j = -1; inicios.forEach((ini, n) => { if(ini <= c) j = n; });
+        if(j >= 0) marcar(palabras[j], "palabra");
+      };
+      u.onend = u.onerror = () => { if(id === lecturaId){ f.el.querySelectorAll(".palabra.leyendo").forEach(x=>x.classList.remove("leyendo")); siguiente(); } };
+      speechSynthesis.speak(u);
+    }
+    siguiente();
+    return true;
+  }
+
   function pararVoz(){
+    quitarResaltado();
     voz.pause();
     if(hayVozNavegador) speechSynthesis.cancel();
     document.querySelectorAll(".escuchar").forEach(b=>{b.setAttribute("aria-pressed","false");b.querySelector(".rotulo").textContent=b.dataset.etiqueta;});
@@ -1001,6 +1142,11 @@ const LIBRO = {
     if(btn.getAttribute("aria-pressed")==="true"){ pararVoz(); return; }
     pararVoz();
     if(btn.dataset.tts){
+      if(leerConVozDelNavegador(btn, () => { if(btn.getAttribute("aria-pressed")==="true") pararVoz(); })){
+        btn.setAttribute("aria-pressed","true");
+        btn.querySelector(".rotulo").textContent = tx("Parar","Stop");
+        return;
+      }
       const u = new SpeechSynthesisUtterance(btn.dataset.tts);
       u.lang = idioma === "en" ? "en-US" : "es-MX";
       const v = vozDelNavegador(); if(v) u.voice = v;
@@ -1015,6 +1161,7 @@ const LIBRO = {
     voz.play().then(()=>{
       btn.setAttribute("aria-pressed","true");
       btn.querySelector(".rotulo").textContent = tx("Pausar","Pause");
+      seguirGrabacion(btn);
     }).catch(()=>{});
   }
   voz.addEventListener("ended", pararVoz);
